@@ -36,6 +36,9 @@ jobs:
       # build - --if-present (because we don't have a build script)
       # run test - runs test script from package.json - ensures that code changes does not break current functionality
 
+      # TODO:
+      # make build and test scripts?
+
       # Install dependencies for the server
       - name: Install Server Dependencies
         working-directory: ./server
@@ -59,9 +62,9 @@ jobs:
       # Run tests for the server
       - name: Test Server
         working-directory: ./server
-        run: npm test
+        run: npm test --if-present
 
       # Run tests for the client
       - name: Test Client
         working-directory: ./client
-        run: npm test
+        run: npm test --if-present
