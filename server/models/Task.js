@@ -10,23 +10,31 @@ const TaskSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+
   name: { type: String, required: true },
+
   creationDate: { type: Date, default: Date.now },
+
+  // make sure this is optional in controller
   dueDate: { type: Date },
+
   status: {
     type: String,
     enum: ["pending", "completed", "overdue"],
     default: "pending",
   },
-  notes: { type: String },
+
   category: {
     type: String,
-    enum: ["easy", "medium", "hard", "very hard"],
+    enum: ["easy", "medium", "hard"],
     required: true,
   },
-  tags: [String],
-  completedDate: { type: Date }, // optional: date when the task was completed
-  points: { type: Number, default: 0 }, // points gained or lost for this task
+
+  // make sure this is optional in controller
+  completedDate: { type: Date },
+
+  // mapping from category to points will be in controller
+  points: { type: Number, default: 0 },
 });
 
 const Task = mongoose.model("Task", TaskSchema);
