@@ -1,0 +1,15 @@
+
+.clock-container{
+    text-align: left !important;
+}
+.clock-date, .clock-time {
+    display: block;
+    font-family: var(--main-font);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    padding-left: 12px;
+  
+}
+
