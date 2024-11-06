@@ -1,0 +1,27 @@
+.pet-container {
+    text-align: center;
+    margin: 5px auto;
+  }
+  
+  .pet-image {
+    width: 100px; /* Default size, can be adjusted */
+    height: auto;
+    padding-top: 20px;
+  }
+  
+  .pet-large .pet-image {
+    width: 175px; /* Larger size for landing page */
+  }
+  
+  
+  .pet-small .pet-image {
+    width: 100px; /* Small size for other pages */
+  }
+  
+  .pet-name {
+    margin-top: -8px;
+  }
+  
+  .pet-level {
+    margin-top: 4px;
+  }
