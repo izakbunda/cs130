@@ -115,7 +115,15 @@ a:hover {
   color: var(--tertiary-color);
 }
 
+.landing-container {
+  margin: 0px; /* Adds a 20px margin around the entire container */
+  padding-left: 8px;
+  padding-right: 8px;
+}
 
+.total-margin{
+  margin: 0px;
+}
 button {
   border-radius: 0px;
   /* border: 1px solid transparent;*/

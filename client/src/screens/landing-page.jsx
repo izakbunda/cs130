@@ -1,18 +1,20 @@
 import { useState } from "react";
 import "../css/index.css";
-import Clock from '../components/clock'
-import Weather from "../components/weather";
 import InfoGrid from "../components/row-grid";
+import { Box, LinearProgress } from '@mui/material';
+import ProgressBar from "../components/progress-bar";
+
 function Landing(){
 return(
-    <html>
+    <div className='total-margin' >
         <h1> Todogotchi </h1>
-        {/* <Clock />
-        <Weather /> */}
-        <InfoGrid />
+            <div className="landing-container">
+                <InfoGrid />
+                <ProgressBar value={60} max={100} page="Landing" />
+            </div>
         
         
-    </html>
+    </div>
 )
 }
 export default Landing;

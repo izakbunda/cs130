@@ -17,7 +17,7 @@ const InfoGrid = () => {
     className: "landing-grid",
     layout: layoutConfig,
     cols: 2, // columns in grid
-    rowHeight: 50, 
+    rowHeight: 36, 
     width: 398, // width of grid based on padding
   };
 
