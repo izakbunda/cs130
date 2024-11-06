@@ -8,6 +8,7 @@ import {TaskEditor} from "./taskEditor";
 export const Folder = (props) => {
   // track states (list of tasks)
   const [tasks, setTasks] = useState([]);
+  //const [expand, setExpand] = useState(true);
 
   // add a Task to the list
   const addTask = (task) => {
@@ -21,30 +22,31 @@ export const Folder = (props) => {
 
   // delete a Task from the list
   const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => {
-      task.id !== id;
-    }))
+    setTasks(tasks.filter((task) => 
+      task.id !== id
+    ));
   };
+
 
   // toggle if a task is Complete or not
   const toggleComplete = (id) => {
-    setTasks(tasks.map((task) => {
+    setTasks(tasks.map((task) => 
         task.id === id ? { ...task, completed: !task.completed } : task
-    }));
+    ));
   }
 
   // request to edit a task name
   const editTask = (id) => {
-    setTasks(tasks.map((task) => {
+    setTasks(tasks.map((task) => 
         task.id === id ? { ...task, isEditing: !task.isEditing } : task
-    }));
+    ));
   }
 
   // submit new task name
   const editTodo = (todo, id) => {
-    setTasks(tasks.map((task) => {
+    setTasks(tasks.map((task) => 
         task.id === id ? { ...task, todo, isEditing: !task.isEditing } : task
-    }));
+    ));
   };
 
   // return UI component of folder
