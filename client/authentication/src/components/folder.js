@@ -1,50 +1,57 @@
-import React, { useState } from "react";
-import { Task } from "./task";
-import { TaskAdder } from "./taskAdder";
-import { v4 as uuidv4 } from "uuid";
-import { TaskEditor } from "./taskEditor";
+import {Task} from "./task";
+import {v4 as uuidv4} from "uuid";
+import React, {useState} from "react";
+import {TaskAdder} from "./taskAdder";
+import {TaskEditor} from "./taskEditor";
 
-export const Folder = () => {
+
+export const Folder = (props) => {
+  // track states (list of tasks)
   const [tasks, setTasks] = useState([]);
 
+  // add a Task to the list
   const addTask = (task) => {
-    setTasks([
-      ...tasks,
-      { id: uuidv4(), todo: task, completed: false, isEditing: false },
+    setTasks([...tasks, { 
+      id: uuidv4(), 
+      todo: task, 
+      completed: false, 
+      isEditing: false },
     ]);
   }
 
-  const deleteTask = (id) => setTasks(tasks.filter((task) => task.id !== id));
-
-  const toggleComplete = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  }
-
-  const editTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, isEditing: !task.isEditing } : task
-      )
-    );
-  }
-
-  const editTodo = (todo, id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, todo, isEditing: !task.isEditing } : task
-      )
-    );
+  // delete a Task from the list
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => {
+      task.id !== id;
+    }))
   };
 
+  // toggle if a task is Complete or not
+  const toggleComplete = (id) => {
+    setTasks(tasks.map((task) => {
+        task.id === id ? { ...task, completed: !task.completed } : task
+    }));
+  }
+
+  // request to edit a task name
+  const editTask = (id) => {
+    setTasks(tasks.map((task) => {
+        task.id === id ? { ...task, isEditing: !task.isEditing } : task
+    }));
+  }
+
+  // submit new task name
+  const editTodo = (todo, id) => {
+    setTasks(tasks.map((task) => {
+        task.id === id ? { ...task, todo, isEditing: !task.isEditing } : task
+    }));
+  };
+
+  // return UI component of folder
   return (
-    <div className="TodoWrapper">
-      <h1>Get Things Done !</h1>
+    <div className="Folder">
+      <h1>{props.name}</h1>
       <TaskAdder addTask={addTask} />
-      {/* display tasks */}
       {tasks.map((task) =>
         task.isEditing ? (
           <TaskEditor editTask={editTodo} todo={task} />

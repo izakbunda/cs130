@@ -24,19 +24,24 @@ h1 {
   font-size: 1.75rem;
 }
 
-.TodoWrapper {
+.Folder {
   background: #1A1A40;
   margin-top: 5rem;
   padding: 2rem;
   border-radius: 5px;
 }
 
-.TodoForm {
+.TaskAdder {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-.todo-input {
+.TaskEditor {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.TaskInputAdder {
   outline: none;
   background: none;
   border: 1px solid #8758ff;
@@ -47,11 +52,18 @@ h1 {
   color: #fff;
 }
 
-.todo-input::placeholder {
-  color: #ffffff4d;
+.TaskInputEditor {
+  outline: none;
+  background: none;
+  border: 1px solid #8758ff;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  width: 300px;
+  color: #fff;
 }
 
-.todo-btn {
+.TaskAddButton {
   background: #8758ff;
   color: #fff;
   border: none;
@@ -59,7 +71,15 @@ h1 {
   cursor: pointer;
 }
 
-.Todo {
+.TaskEditButton {
+  background: #8758ff;
+  color: #fff;
+  border: none;
+  padding: 0.55rem;
+  cursor: pointer;
+}
+
+.Task {
   display: flex;
   justify-content: space-between;
   align-items: center;
