@@ -9,6 +9,9 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 
 import authRoutes from "./routes/auth.js";
+import folderRoutes from "./routes/folderRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 import { register } from "./controllers/auth.js";
 
 // import { verifyToken } from "./middleware/auth.js";
@@ -47,6 +50,9 @@ app.use(bodyParser.urlencoded({ extended: true })); // extended: true  will allo
 
 /* ROUTES */
 app.use("/auth", authRoutes);
+app.use("/folders", folderRoutes);
+app.use("/notes", noteRoutes);
+app.use("/tasks", taskRoutes);
 
 const PORT = process.env.PORT || 6001;
 // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
