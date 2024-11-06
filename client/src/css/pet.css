@@ -1,7 +1,7 @@
 .pet-container {
     position: relative;
     text-align: center;
-    margin: 5px auto;
+    margin-top: 0px auto;
   }
   .pet-shadow {
     position: absolute;
@@ -19,7 +19,7 @@
     position: relative; 
     width: 100px;
     height: auto;
-    padding-top: 20px;
+    padding-top: 25px;
     z-index: 1; 
   }
   
