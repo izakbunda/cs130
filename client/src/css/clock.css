@@ -5,11 +5,11 @@
 .clock-date, .clock-time {
     display: block;
     font-family: var(--main-font);
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 400;
-    line-height: 1.2;
-    margin: 0;
-    padding-left: 12px;
-  
+    line-height: 1.4;
+    margin-top: -6px;
+    margin-left: 0px;
+    /* padding-left: 12px; */
 }
 
