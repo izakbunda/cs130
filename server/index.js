@@ -47,6 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // extended: true  will allo
 
 /* ROUTES */
 app.use("/auth", authRoutes);
+app.use("/login", authRoutes);
 
 const PORT = process.env.PORT || 6001;
 // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
