@@ -8,7 +8,6 @@
   height: 556px;
   margin: 0 auto;
   padding: 1.2rem;
-  text-align: center;
   overflow: hidden;
   border-radius: 5px;
   background-color: #F2F0EF;
@@ -44,7 +43,8 @@ body {
 /* h1: Todogotchi Main Title used in Login + Landin */
 h1 {
   font-family: var(--secondary-font);
-  font-size: 6rem;
+  text-align: center;
+  font-size: 6.2rem;
   font-weight: 600;
   line-height: .92;
   margin: 0;
@@ -81,9 +81,9 @@ h4 {
 /* h5 Information Text (Weather/Static App Text) */
 h5 {
   font-family: var(--main-font);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 400;
-  line-height: .5;
+  line-height: 1.2;
   margin: 0;
 }
 /* h6: Due Date Text */
@@ -115,7 +115,15 @@ a:hover {
   color: var(--tertiary-color);
 }
 
+.landing-container {
+  margin: 0px; /* Adds a 20px margin around the entire container */
+  padding-left: 8px;
+  padding-right: 8px;
+}
 
+.total-margin{
+  margin: 0px;
+}
 button {
   border-radius: 0px;
   /* border: 1px solid transparent;*/
