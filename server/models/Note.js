@@ -25,22 +25,19 @@ const NoteSchema = new mongoose.Schema({
 // pre-delete hook - triggers before deleteOne on Note docs
 NoteSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
   try {
-    console.log("doing pre delete stuff...");
     // get all associated task ids
     const tasks = await this.tasks;
-    console.log(tasks);
 
     // loop over tasks + delete each one
     if (tasks && tasks.length > 0) {
       for (const taskId of tasks) {
-        const task = Task.findById(taskId);
+        const task = await Task.findById(taskId);
         await task.deleteOne(); // should trigger task pre-delete hook
       }
     }
 
     // remove note ref from folder's notes arr
     const folder = await Folder.findByIdAndUpdate(this.folder, { $pull: { notes: this._id } });
-    console.log("new notes arr: ", folder.notes);
 
     next();
   } catch (error) {

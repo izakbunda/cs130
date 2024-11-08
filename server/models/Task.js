@@ -6,13 +6,6 @@ import Note from "../models/Note.js";
  */
 
 const TaskSchema = new mongoose.Schema({
-  // do we need this??
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-
   note: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Note",
@@ -48,12 +41,10 @@ const TaskSchema = new mongoose.Schema({
 // pre-delete hook - removes task ref from note's tasks arr
 TaskSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
   try {
-    console.log("removing task ref...");
     // remove task from note arr
-    const note = await Note.findByIdAndUpdate(this.note, { $pull: { tasks: this._id } });
-    console.log("new tasks array: ", note.tasks);
+    const note = await Note.findByIdAndUpdate(this.note, { $pull: { tasks: this._id } }, {new: true});
 
-  next();
+    next();
   } catch (error) {
     next(error);
   }

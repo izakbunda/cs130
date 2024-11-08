@@ -15,7 +15,7 @@ export const createFolder = async (req, res) => {
         }
 
         // check if user exists
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).exec();
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -54,13 +54,12 @@ export const getFolders = async (req, res) => {
         }
 
         // get list of folders from user
-        const user = await User.findById(userId).populate("folders");
+        const user = await User.findById(userId).populate("folders").exec();
         
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        console.log(user.folders)
         // send back list of folders
         res.status(200).json(user.folders);
     } catch (error) {
@@ -82,7 +81,7 @@ export const updateFolder = async (req, res) => {
         }
 
         // check if folder exists
-        const folder = await Folder.findById(folderId);
+        const folder = await Folder.findById(folderId).exec();
         if (!folder) {
             return res.status(404).json({ message: "Folder not found" });
         }
@@ -90,8 +89,6 @@ export const updateFolder = async (req, res) => {
         // update folder
         folder.name = name;
         await folder.save();
-
-        console.log(folder.name);
 
         // send back the updated folder
         res.status(200).json(folder);
@@ -114,7 +111,7 @@ export const deleteFolder = async (req, res) => {
         }
 
         // check if folder exists
-        const folder = Folder.findById(folderId);
+        const folder = await Folder.findById(folderId).exec();
         if (!folder) {
             return res.status(404).json({ message: "Folder not found" });
         }
@@ -122,7 +119,7 @@ export const deleteFolder = async (req, res) => {
         // delete folder -- triggers pre-delete hook
         await folder.deleteOne();
 
-        res.status(200);
+        res.status(200).json();
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

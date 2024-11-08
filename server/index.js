@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import petRoutes from "./routes/petRoutes.js";
 import { register } from "./controllers/auth.js";
 
 // import { verifyToken } from "./middleware/auth.js";
@@ -53,6 +54,7 @@ app.use("/auth", authRoutes);
 app.use("/folders", folderRoutes);
 app.use("/notes", noteRoutes);
 app.use("/tasks", taskRoutes);
+app.use("/pets", petRoutes);
 
 const PORT = process.env.PORT || 6001;
 // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));

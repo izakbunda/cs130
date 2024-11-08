@@ -15,7 +15,7 @@ export const createNote = async (req, res) => {
         }
 
         // check if folder exists
-        const folder = await Folder.findById(folderId);
+        const folder = await Folder.findById(folderId).exec();
         if (!folder) {
             res.status(404).json({ message: "Folder not found" });
         }
@@ -30,12 +30,11 @@ export const createNote = async (req, res) => {
         // store new note
         const savedNote = await note.save();
         
-        // add note to folder's notes arr
-        folder.tasks.push(note._id);
+        folder.notes.push(note._id);
         await folder.save();
 
         // send back new note
-        res.status(200).json(savedNote);
+        res.status(201).json(savedNote);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -54,12 +53,11 @@ export const getNotes = async (req, res) => {
         }
 
         // check if folder exists
-        const folder = Folder.findById(folderId).populate("notes");
+        const folder = await Folder.findById(folderId).populate("notes").exec();
         if (!folder) {
             return res.status(404).json({ message: "Folder not found"});
         }
 
-        console.log(folder.notes);
         // send back list of notes
         res.status(200).json(folder.notes);
     } catch (error) {
@@ -81,7 +79,7 @@ export const updateNote = async (req, res) => {
         }
 
         // check if note exists
-        const note = Note.findById(noteId);
+        const note = await Note.findById(noteId).exec();
         if (!note) {
             return res.status(404).json({ message: "Note not found"});
         }
@@ -110,7 +108,7 @@ export const deleteNote = async (req, res) => {
         }
 
         // check if note exists
-        const note = Note.findById(noteId);
+        const note = await Note.findById(noteId).exec();
         if (!note) {
             res.status(404).json({ message: "Note not found"});
         }
@@ -118,7 +116,7 @@ export const deleteNote = async (req, res) => {
         // delete note -- triggers pre-delete hook
         await note.deleteOne();
 
-        res.status(200);
+        res.status(200).json();
     } catch (error) {
         res.status(500).json({ error: error.messge });
     }

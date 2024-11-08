@@ -14,22 +14,21 @@ let pointsMapping = {
 export const createTask = async (req, res) => {
     try {
         const { noteId } = req.params;
-        const { userId, name, dueDate, category } = req.body;
+        const { name, dueDate, category } = req.body;
 
         // confirm required data
-        if (!userId || !name || !category || !noteId) {
+        if (!name || !category || !noteId) {
             return res.status(400).json({ message: "Required fields missing" });
         }
 
         // check if note exists
-        const note = await Note.findById(noteId);
+        const note = await Note.findById(noteId).exec();
         if (!note) {
             return res.status(404).json({ message: "Note not found" });
         }
 
         // create new task
         const task = new Task({
-            user: userId,
             note: noteId,
             name,
             creationDate: Date.now(),
@@ -45,8 +44,6 @@ export const createTask = async (req, res) => {
         // add task to note's tasks arr
         note.tasks.push(task._id);
         await note.save();
-
-        console.log(note);
 
         // send back new task
         res.status(201).json(savedTask);
@@ -68,13 +65,12 @@ export const getTasks = async (req, res) => {
         }
 
         // get list of tasks from note
-        const note = await Note.findById(noteId).populate("tasks");
+        const note = await Note.findById(noteId).populate("tasks").exec();
         
         if (!note) {
             return res.status(404).json({ message: "Note not found" });
         }
 
-        console.log(note.tasks);
         // send back list of tasks
         res.status(200).json(note.tasks)
     } catch (error) {
@@ -98,20 +94,19 @@ export const updateTask = async (req, res) => {
         // TODO: need to check that update data is valid
 
         // check if task exists
-        const oldTask = await Task.findbyId(taskId);
-        if (!task) {
+        const oldTask = await Task.findById(taskId).exec();
+        if (!oldTask) {
             res.status(404).json({ message: "Task not found" });
         }
 
         // if category changes, update points
-        if (taskData.category && taskData.category !== task.category) {
+        if (taskData.category && taskData.category !== oldTask.category) {
             taskData.points = pointsMapping[taskData.category];
         }
 
         // find task + update it
-        const task = await Task.findByIdAndUpdate(taskId , taskData, {new: true});
+        const task = await Task.findByIdAndUpdate(taskId, taskData, {new: true}).exec();
 
-        console.log("updated task: ", task);
         // send back updated task
         res.status(200).json(task);
     } catch (error) {
@@ -132,7 +127,7 @@ export const deleteTask = async (req, res) => {
         }
 
         // check if task exists
-        const task = await Task.findById(taskId);
+        const task = await Task.findById(taskId).exec();
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
         }
@@ -140,7 +135,7 @@ export const deleteTask = async (req, res) => {
         // delete task -- triggers pre-delete hook
         await task.deleteOne();
 
-        res.status(200);
+        res.status(200).json();
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
