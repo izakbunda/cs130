@@ -51,6 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // extended: true  will allo
 
 /* ROUTES */
 app.use("/auth", authRoutes);
+app.use("/login", authRoutes);
 app.use("/folders", folderRoutes);
 app.use("/notes", noteRoutes);
 app.use("/tasks", taskRoutes);

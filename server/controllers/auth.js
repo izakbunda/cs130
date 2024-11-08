@@ -7,7 +7,7 @@ import User from "../models/User.js";
 // send the new user back if everything goes well
 export const register = async (req, res) => {
   try {
-    const { email, password, profile } = req.body;
+    const { email, password } = req.body;
 
     const salt = await bcrypt.genSalt(); // used to encrypt password
     console.log("Generated salt:", salt);
@@ -21,10 +21,6 @@ export const register = async (req, res) => {
       // set values from req body
       email,
       password: passwordHash,
-      profile: {
-        username: profile.username || "defaultusername",
-        picturePath: profile.picturePath || "",
-      },
 
       // default values:
       folders: [], // array -> empty
@@ -66,7 +62,7 @@ export const login = async (req, res) => {
 
     // JWT token setup
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password; // delete so it doesnt getsent to the frontend
+    delete user.password; // delete so it doesnt get sent to the frontend
 
     res.status(200).json({ token, user });
   } catch (error) {
