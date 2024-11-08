@@ -1,17 +1,47 @@
 import mongoose from "mongoose";
+import User from "../models/User.js"
+import Note from "../models/Note.js";
 
 /**
  * notes is custom – view ./Notes.js
  */
 
 const FolderSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: { type: String, required: true },
   notes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Notes",
+      ref: "Note",
     },
   ],
+});
+
+// pre-delete hook - triggers before deleteOne on Note docs
+FolderSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+  try {
+    // get all associated note ids
+    const notes = await this.notes;
+
+    // loop over notes + delete each one
+    if (notes && notes.length > 0) {
+      for (const noteId of notes) {
+        const note = await Note.findById(noteId);
+        await note.deleteOne(); // should trigger note pre-delete hook
+      }
+    }
+
+    // remove folder ref from user's notes arr
+    const user = await User.findByIdAndUpdate(this.user, { $pull: { folders: this._id } }, {new: true});
+
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const Folder = mongoose.model("Folder", FolderSchema);
