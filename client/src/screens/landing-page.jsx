@@ -5,6 +5,7 @@ import InfoGrid from "../components/row-grid";
 import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
+import MotivationalMessage from '../components/motivation';
 
 function Landing() {
     const [samplePet, setSamplePet] = useState({
@@ -35,6 +36,7 @@ function Landing() {
                 onClick={handleNavigateToFolder} 
                 icon={<img src=".././public/todo.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} 
             />
+            <MotivationalMessage />
           </div>
         </div>
     );

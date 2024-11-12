@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import '../css/pet.css';
+import { PetFactory } from './petFactories'; 
 
-const PetIcon = ({ name, level, exp, page }) => {
+// Currently variants include Sharkie, Kittie, Froggie
+const PetIcon = ({ name, level, exp, page, variant = 'Sharkie' }) => {
   const [isJumping, setIsJumping] = useState(false);
 
-  let petImage;
-  let isSharkieC = false;
-  if (level >= 0 && level <= 8) {
-    petImage = '../../public/SharkieA.png'; 
-  } else if (level >= 9 && level <= 12) {
-    petImage = '../../public/SharkieB.png'; 
-  } else if (level >= 13) {
-    petImage = '../../public/SharkieC.png';
-    isSharkieC = true;
-  }
+  const { petImage, isSpecial } = PetFactory(variant, level);
 
   useEffect(() => {
-    if (isSharkieC) {
+    if (isSpecial) {
       const interval = setInterval(() => {
         setIsJumping(true);
         setTimeout(() => setIsJumping(false), 1000);
@@ -24,7 +17,7 @@ const PetIcon = ({ name, level, exp, page }) => {
 
       return () => clearInterval(interval);
     }
-  }, [isSharkieC]);
+  }, [isSpecial]);
 
   const sizeClass = page === 'Landing' ? 'pet-large' : 'pet-small';
 
@@ -36,7 +29,7 @@ const PetIcon = ({ name, level, exp, page }) => {
           alt={`Pet - ${name}`}
           className={`pet-image ${isJumping ? 'jump' : ''}`} 
         />
-        <div className="pet-shadow"></div> {/* Shadow is a sibling of the image */}
+        <div className="pet-shadow"></div> 
       </div>
       {page === 'Landing' && (
         <>
