@@ -23,9 +23,12 @@ const ProgressBar = ({ currentExp, level, page }) => {
     return (
       <div className="progress-bar-container">
         <progress value={currentExp} max={maxExp} className={className} />
-        <div className="progress-text">
+        {page === 'Landing' && (
+          <div className="progress-text">
           {`Level ${level}: ${Math.round(currentExp)}/${Math.round(maxExp)} EXP`}
         </div>
+        )}
+        
       </div>
     );
 };

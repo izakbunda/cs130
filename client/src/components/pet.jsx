@@ -30,14 +30,20 @@ const PetIcon = ({ name, level, exp, page }) => {
 
   return (
     <div className={`pet-container ${sizeClass}`}>
-      <div className="pet-shadow"></div>
-      <img
-        src={petImage}
-        alt={`Pet - ${name}`}
-        className={`pet-image ${isJumping ? 'jump' : ''}`} 
-      />
-      <h2 className="pet-name">{name}</h2>
-      <h5 className="pet-level">Level: {level}</h5>
+      <div className="pet-image-container">
+        <img
+          src={petImage}
+          alt={`Pet - ${name}`}
+          className={`pet-image ${isJumping ? 'jump' : ''}`} 
+        />
+        <div className="pet-shadow"></div> {/* Shadow is a sibling of the image */}
+      </div>
+      {page === 'Landing' && (
+        <>
+          <h2 className="pet-name">{name}</h2>
+          <h5 className="pet-level">Level: {level}</h5>
+        </>
+      )}
     </div>
   );
 };
