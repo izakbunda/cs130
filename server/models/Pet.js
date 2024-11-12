@@ -11,6 +11,7 @@ const PetSchema = new mongoose.Schema({
     required: true,
   },
   name: { type: String, required: true },
+  type: { type: String, required: true },
 
   points: { type: Number, default: 0 }, // current xp
   level: { type: Number, default: 0 }, // pet's current level based on points
