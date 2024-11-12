@@ -7,10 +7,10 @@ import User from "../models/User.js";
 export const createPet = async (req, res) => {
     try {
         const { userId } = req.params;
-        const { name } = req.body;
+        const { name, type } = req.body;
 
         // confirm data 
-        if (!userId || !name) {
+        if (!userId || !name || !type) {
             return res.status(400).json({ message: "Required fields missing" });
         }
 
@@ -24,6 +24,7 @@ export const createPet = async (req, res) => {
         const pet = new Pet({
             user: userId,
             name,
+            type,
             // MAYBE NEED TO INIT POINTS + XP HERE
         })
 
