@@ -7,14 +7,14 @@ import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
 
-function FolderPage() {
+function NotePage() {
     const [samplePet] = useState({
         name: 'Sharkie',
         level: 13,
         exp: 600,
     });
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const layoutFolder = [
         { i: "pet", x: 0, y: 0, w: 4, h: 2, static: true },
@@ -27,7 +27,7 @@ function FolderPage() {
         className: "folder-grid",
         layout: layoutFolder,
         cols: 16,
-        rowHeight: 40,
+        rowHeight: 40, 
         width: 406, 
     };
 
@@ -48,14 +48,14 @@ function FolderPage() {
                 <div key="buttons" className="grid-item">
                     <div className="button-container">
                     <Button
-                        icon={<img src="../public/add_folder_icon.svg" alt="Add Folder Icon" style={{ width: '25px', height: '25px' }} />}
+                        icon={<img src="../public/add_notes_icon.svg" alt="Add Folder Icon" style={{ width: '25px', height: '25px' }} />}
                         onClick={() => console.log('Add Folder clicked!')}
                         noOutline
                         className="folder-button large-icon"
                     />
                     <Button
                         icon={<img src="../public/home_icon.svg" alt="Home Icon" style={{ width: '25px', height: '25px' }} />}
-                        onClick={() => navigate('/')} 
+                        onClick={() => navigate('/')}
                         noOutline
                         className="folder-button large-icon"
                     />
@@ -67,11 +67,11 @@ function FolderPage() {
             </GridLayout>
             <Button 
                 text="Temporary note" 
-                onClick={() => navigate('/note')} 
+                onClick={() => navigate('/folder')} 
                 icon={<img src=".././public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
             />
         </div>
     );
 }
 
-export default FolderPage;
+export default NotePage;
