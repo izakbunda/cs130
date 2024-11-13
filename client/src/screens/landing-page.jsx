@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "../css/index.css";
 import InfoGrid from "../components/row-grid";
-import { Box, LinearProgress } from '@mui/material';
 import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
-import Button from "../components/button"
+import Button from "../components/button";
+import MotivationalMessage from '../components/motivation';
 
-function Landing(){
+function Landing() {
     const [samplePet, setSamplePet] = useState({
         name: 'Sharkie',
         level: 13, // Example starting level
         exp: 600, // Example starting EXP
     });
-    const handleClick = () => {
-        console.log('Button clicked!');
+    const navigate = useNavigate(); // For navigation
+
+    const handleNavigateToFolder = () => {
+        navigate('/folder');
     };
     
-      return (
-        <div className="total-margin" >
+    return (
+        <div className="total-margin">
           <h1>Todogotchi</h1>
           <div className="landing-container">
             <InfoGrid />
@@ -30,11 +33,13 @@ function Landing(){
             />
             <Button 
                 text="To-Do List" 
-                onClick={handleClick} 
+                onClick={handleNavigateToFolder} 
                 icon={<img src=".././public/todo.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} 
             />
+            <MotivationalMessage />
           </div>
         </div>
-      );
+    );
 }
+
 export default Landing;
