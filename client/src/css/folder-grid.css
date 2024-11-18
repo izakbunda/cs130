@@ -1,0 +1,52 @@
+.folder-grid {
+    width: 100%;
+    height: auto;
+    margin-left: -23px;
+    margin-top: -23px;
+}
+
+.folder-page-container {
+    padding: 10px;
+}
+
+.grid-item h2 {
+    text-align: center;
+}
+
+.grid-item img {
+    margin: 0px;
+    cursor: pointer;
+}
+.grid-item .button-container {
+    margin-top: -15px;
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    gap: 0px; 
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.folder-button {
+    width: 38px;
+    height: 38px;
+    padding: 0px;
+    padding-left: 8px;
+ 
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s; 
+
+}
+.folder-button:hover {
+    transform: scale(1.1);
+}
+
+

@@ -1,0 +1,21 @@
+{
+    "Initialize component": {
+      "scope": "javascript,typescript",
+      "prefix": "initializeComponent",
+      "body": [
+        "import React from \"react\";",
+        "",
+        "/*",
+        "  -- DOCUMENTATION --",
+        "*/",
+        "const $1 = (props) => {",
+        "  return (",
+        "    <div>$1 Component</div>",
+        "  );",
+        "};",
+        "",
+        "export default $1;"
+      ]
+    }
+  }
+  
