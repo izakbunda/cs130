@@ -13,23 +13,12 @@ export const Note = (props) => {
   const [isAdding, setIsAdding] = useState(false);
 
   // add a Task to the list
-  const addTask = (task, endDate) => {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleString('en-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-    const reformattedDate = formattedDate.replace(', ', 'T');
+  const addTask = (task, startDate, endDate) => {
 
     setTasks([...tasks, { 
       id: uuidv4(), 
       todo: task, 
-      start: reformattedDate,
+      start: startDate,
       end: endDate,
       completed: false, 
       isEditing: false },
@@ -38,9 +27,7 @@ export const Note = (props) => {
 
   // toggle task adder
   const toggleIsAdding = () => {
-    console.log('current', isAdding);
     setIsAdding(!isAdding);
-    console.log('new', isAdding);
   }
 
   // delete a Task from the list
@@ -66,9 +53,9 @@ export const Note = (props) => {
   }
 
   // submit new task name
-  const editTodo = (todo, id) => {
+  const editTodo = (newName, newDueDate, id) => {
     setTasks(tasks.map((task) => 
-        task.id === id ? { ...task, todo, isEditing: !task.isEditing } : task
+        task.id === id ? { ...task, todo: newName, end: newDueDate, isEditing: !task.isEditing } : task
     ));
   };
 

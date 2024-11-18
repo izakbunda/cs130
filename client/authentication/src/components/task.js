@@ -14,7 +14,6 @@ export const Task = ({todo, deleteTask, editTask, toggleComplete}) => {
           <FontAwesomeIcon className="delete-icon" icon={faTrash} onClick={() => deleteTask(todo.id)} />
         </div>
         <ProgressBar startDate={todo.start} endDate={todo.end} />
-        
     </div>
   )
 }

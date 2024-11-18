@@ -13,8 +13,19 @@ export const ProgressBar = ({ startDate, endDate }) => {
     const totalDuration = end - start;
     const elapsedTime = now - start;
     const progressPercentage = Math.min((elapsedTime / totalDuration) * 100, 100);
+    /*
+    console.log("calculating progress");
+    console.log("startdate ", startDate);
+    console.log("enddate ", endDate);
+    console.log("now  ", now);
+    console.log("elapsed", elapsedTime);
+    console.log("total", totalDuration);
+    console.log("progress", progressPercentage);
+    console.log("calculating progress");
+    */
     setProgress(progressPercentage);
     calculateTimeRemaining(end - now);
+
   };
 
   // Calculate the time remaining

@@ -15,12 +15,31 @@ export const TaskAdder = ({addTask}) => {
   const handleSubmit = (e) => {
     // prevent default action
       e.preventDefault();
+      // fields must be filled out
       if ((value) && (dueDate)) {
-        // add todo
-        addTask(value, dueDate);
-        // clear form after submission
-        setValue('');
-        setDueDate('');
+        // check due date is in the future
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleString('en-CA', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+        const localCurrentDate = new Date(formattedDate.replace(', ', 'T'));
+        const localDueDate = new Date(dueDate);
+        if (localDueDate - localCurrentDate > 0) {
+          // add todo
+          addTask(value, localCurrentDate, localDueDate);
+          console.log("adding task", localCurrentDate, localDueDate);
+          // clear form after submission
+          setValue('');
+          setDueDate('');
+        } else {
+          console.log("Cannot add task due in the past");
+        }
       }
     };
 
@@ -28,7 +47,7 @@ export const TaskAdder = ({addTask}) => {
   return (
     <form onSubmit={handleSubmit} className="TaskAdder">
       <input type="text" value={value} onChange={(e) => setValue(e.target.value)} className="TaskInputAdder" placeholder='What is the task today?' />
-      <DateTimePicker onDateTimeChange={handleDateTimeChange} value={value} />
+      <DateTimePicker title={"Due Date:"} onDateTimeChange={handleDateTimeChange} value={value} />
       <button type="submit" className='TaskAddButton'>Add Task</button>
     </form>
   )
