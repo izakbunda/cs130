@@ -55,7 +55,7 @@ function FolderPage() {
                     />
                     <Button
                         icon={<img src="../public/home_icon.svg" alt="Home Icon" style={{ width: '25px', height: '25px' }} />}
-                        onClick={() => navigate('/')} 
+                        onClick={() => navigate('/landing')} 
                         noOutline
                         className="folder-button large-icon"
                     />

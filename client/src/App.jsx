@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import Landing from './screens/landing-page.jsx';
 import FolderPage from './screens/folder-page.jsx';
 import NotePage from "./screens/note-page.jsx";
+import PetPage from "./screens/pet-page.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,7 +13,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<PetPage/>} />
+        <Route path="/landing" element={<Landing/>} />
         <Route path="/folder" element={<FolderPage />} />
         <Route path="/note" element={<NotePage />}/>
       </Routes>

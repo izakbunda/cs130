@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../css/pet.css';
 import { PetFactory } from './petFactories'; 
 
@@ -8,16 +8,13 @@ const PetIcon = ({ name, level, exp, page, variant = 'Sharkie' }) => {
 
   const { petImage, isSpecial } = PetFactory(variant, level);
 
-  useEffect(() => {
-    if (isSpecial) {
-      const interval = setInterval(() => {
-        setIsJumping(true);
-        setTimeout(() => setIsJumping(false), 1000);
-      }, 8000); 
-
-      return () => clearInterval(interval);
+  //  jump when pet is clicked
+  const handleJump = () => {
+    if (!isJumping) {
+      setIsJumping(true);
+      setTimeout(() => setIsJumping(false), 1000);
     }
-  }, [isSpecial]);
+  };
 
   const sizeClass = page === 'Landing' ? 'pet-large' : 'pet-small';
 
@@ -28,6 +25,7 @@ const PetIcon = ({ name, level, exp, page, variant = 'Sharkie' }) => {
           src={petImage}
           alt={`Pet - ${name}`}
           className={`pet-image ${isJumping ? 'jump' : ''}`} 
+          onClick={handleJump} 
         />
         <div className="pet-shadow"></div> 
       </div>
