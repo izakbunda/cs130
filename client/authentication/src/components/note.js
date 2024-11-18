@@ -3,21 +3,44 @@ import {v4 as uuidv4} from "uuid";
 import React, {useState} from "react";
 import {TaskAdder} from "./taskAdder";
 import {TaskEditor} from "./taskEditor";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
 
-export const Folder = (props) => {
+export const Note = (props) => {
   // track states (list of tasks)
   const [tasks, setTasks] = useState([]);
-  //const [expand, setExpand] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
 
   // add a Task to the list
-  const addTask = (task) => {
+  const addTask = (task, endDate) => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleString('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    const reformattedDate = formattedDate.replace(', ', 'T');
+
     setTasks([...tasks, { 
       id: uuidv4(), 
       todo: task, 
+      start: reformattedDate,
+      end: endDate,
       completed: false, 
       isEditing: false },
     ]);
+  }
+
+  // toggle task adder
+  const toggleIsAdding = () => {
+    console.log('current', isAdding);
+    setIsAdding(!isAdding);
+    console.log('new', isAdding);
   }
 
   // delete a Task from the list
@@ -53,7 +76,13 @@ export const Folder = (props) => {
   return (
     <div className="Folder">
       <h1>{props.name}</h1>
-      <TaskAdder addTask={addTask} />
+      <FontAwesomeIcon className="edit-icon" icon={faPlus} onClick={() => toggleIsAdding()} />
+      {isAdding ? (
+        <TaskAdder addTask={addTask} />
+      ) : (
+        <></>
+      )}
+      
       {tasks.map((task) =>
         task.isEditing ? (
           <TaskEditor editTask={editTodo} todo={task} />

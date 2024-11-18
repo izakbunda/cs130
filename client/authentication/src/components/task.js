@@ -1,4 +1,5 @@
 import React from 'react'
+import {ProgressBar} from './progressBar';
 import {faTrash} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPenToSquare} from '@fortawesome/free-solid-svg-icons'
@@ -12,6 +13,8 @@ export const Task = ({todo, deleteTask, editTask, toggleComplete}) => {
           <FontAwesomeIcon className="edit-icon" icon={faPenToSquare} onClick={() => editTask(todo.id)} />
           <FontAwesomeIcon className="delete-icon" icon={faTrash} onClick={() => deleteTask(todo.id)} />
         </div>
+        <ProgressBar startDate={todo.start} endDate={todo.end} />
+        
     </div>
   )
 }
