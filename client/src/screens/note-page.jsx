@@ -6,6 +6,7 @@ import "../css/folder-grid.css";
 import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
+import {Folder} from "../components/folder";
 
 function NotePage() {
     const [samplePet] = useState({
@@ -65,11 +66,18 @@ function NotePage() {
                     <ProgressBar currentExp={samplePet.exp} level={samplePet.level} page="Folder" />
                 </div>
             </GridLayout>
+            <Folder name="Folder 1" />
             <Button 
                 text="Temporary note" 
                 onClick={() => navigate('/folder')} 
                 icon={<img src=".././public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
             />
+            <Button 
+                text="Temporary note" 
+                onClick={() => navigate('/folder')} 
+                icon={<img src=".././public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
+            />
+            
         </div>
     );
 }
