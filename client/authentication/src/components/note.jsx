@@ -5,16 +5,16 @@ import {TaskAdder} from "./taskAdder";
 import {TaskEditor} from "./taskEditor";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faTrash} from '@fortawesome/free-solid-svg-icons'
 
 
-export const Note = (props) => {
+export const Note = ({deleteNoteFunc, noteInfo}) => {
   // track states (list of tasks)
   const [tasks, setTasks] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
 
   // add a Task to the list
   const addTask = (task, startDate, endDate) => {
-
     setTasks([...tasks, { 
       id: uuidv4(), 
       todo: task, 
@@ -60,28 +60,36 @@ export const Note = (props) => {
   };
 
   // return UI component of folder
+
   return (
     <div className="Folder">
-      <h1>{props.name}</h1>
       <FontAwesomeIcon className="edit-icon" icon={faPlus} onClick={() => toggleIsAdding()} />
-      {isAdding ? (
-        <TaskAdder addTask={addTask} />
-      ) : (
-        <></>
-      )}
-      
+      <h1>{noteInfo.title}</h1>
+      <FontAwesomeIcon className="delete-icon" icon={faTrash} onClick={() => deleteNoteFunc(noteInfo.id)} />
       {tasks.map((task) =>
         task.isEditing ? (
-          <TaskEditor editTask={editTodo} todo={task} />
+          <>
+            <Task
+              key={task.id}
+              todo={task}
+              editTask={editTask}
+              toggleComplete={toggleComplete}
+            />
+            <TaskEditor editTask={editTodo} todo={task} deleteTaskFunc={deleteTask}/>
+          </>
         ) : (
           <Task
             key={task.id}
             todo={task}
-            deleteTask={deleteTask}
             editTask={editTask}
             toggleComplete={toggleComplete}
           />
         )
+      )}
+      {isAdding ? (
+        <TaskAdder addTask={addTask} />
+      ) : (
+        <></>
       )}
     </div>
   );

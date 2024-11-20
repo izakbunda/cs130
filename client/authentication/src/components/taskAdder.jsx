@@ -9,6 +9,7 @@ export const TaskAdder = ({addTask}) => {
 
   const handleDateTimeChange = (dateTime) => {
     setDueDate(dateTime);
+    console.log(dateTime);
   };
 
   // update the task name
@@ -16,8 +17,7 @@ export const TaskAdder = ({addTask}) => {
     // prevent default action
       e.preventDefault();
       // fields must be filled out
-      if ((value) && (dueDate)) {
-        // check due date is in the future
+      if (value) {
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleString('en-CA', {
           year: 'numeric',
@@ -29,25 +29,39 @@ export const TaskAdder = ({addTask}) => {
           hour12: false
         });
         const localCurrentDate = new Date(formattedDate.replace(', ', 'T'));
-        const localDueDate = new Date(dueDate);
-        if (localDueDate - localCurrentDate > 0) {
+        if (dueDate) {
+          console.log("due date detected")
+          // check due date is in the future
+          
+          const localDueDate = new Date(dueDate);
+          if (localDueDate - localCurrentDate > 0) {
+            // add todo
+            addTask(value, localCurrentDate, localDueDate);
+            console.log("adding task", localCurrentDate, localDueDate);
+            // clear form after submission
+            setValue('');
+            setDueDate('');
+          } else {
+            console.log("Cannot add task due in the past");
+          }
+        } else {
+          console.log("due date not detected")
           // add todo
-          addTask(value, localCurrentDate, localDueDate);
-          console.log("adding task", localCurrentDate, localDueDate);
+          console.log("adding task with no date");
+          addTask(value, localCurrentDate, null);
           // clear form after submission
           setValue('');
           setDueDate('');
-        } else {
-          console.log("Cannot add task due in the past");
         }
+        
       }
     };
 
   // return UI components
+  // <DateTimePicker title={"Due Date:"} onDateTimeChange={handleDateTimeChange} value={dueDate} />
   return (
     <form onSubmit={handleSubmit} className="TaskAdder">
       <input type="text" value={value} onChange={(e) => setValue(e.target.value)} className="TaskInputAdder" placeholder='What is the task today?' />
-      <DateTimePicker title={"Due Date:"} onDateTimeChange={handleDateTimeChange} value={value} />
       <button type="submit" className='TaskAddButton'>Add Task</button>
     </form>
   )
