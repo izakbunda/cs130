@@ -70,12 +70,12 @@ function NotePage() {
             <Button 
                 text="Temporary note" 
                 onClick={() => navigate('/folder')} 
-                icon={<img src=".././public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
+                icon={<img src="../../public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
             />
             <Button 
                 text="Temporary note" 
                 onClick={() => navigate('/folder')} 
-                icon={<img src=".././public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
+                icon={<img src="../../public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
             />
             
         </div>

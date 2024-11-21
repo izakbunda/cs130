@@ -3,9 +3,9 @@ import {v4 as uuidv4} from "uuid";
 import React, {useState} from "react";
 import {TaskAdder} from "./taskAdder";
 import {TaskEditor} from "./taskEditor";
-//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-//import {faPlus} from '@fortawesome/free-solid-svg-icons'
-//import {faTrash} from '@fortawesome/free-solid-svg-icons'
+import Button from "../components/button";
+
+import '../css/task.css';
 
 
 export const Note = ({deleteNoteFunc, noteInfo}) => {
@@ -62,10 +62,11 @@ export const Note = ({deleteNoteFunc, noteInfo}) => {
   // return UI component of folder
 
   return (
-    <div className="Folder">
-      <Button onClick={() => toggleIsAdding()} icon={<img src=".././public/todo.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
-      <h1>{noteInfo.title}</h1>
-      <Button onClick={() => deleteNoteFunc(noteInfo.id)} icon={<img src=".././public/foloder_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
+    <div className="rounded-button">
+      <Button onClick={() => toggleIsAdding()} icon={<img src="../../public/add_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
+      <p>{noteInfo.title}</p>
+      <h6>{noteInfo.title}</h6>
+      <Button onClick={() => deleteNoteFunc(noteInfo.id)} icon={<img src="../../public/trash_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
       {tasks.map((task) =>
         task.isEditing ? (
           <>

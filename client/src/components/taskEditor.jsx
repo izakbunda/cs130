@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {DateTimePicker} from './dateTime';
-//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-//import {faTrash} from '@fortawesome/free-solid-svg-icons'
+import Button from "../components/button";
 
 export const TaskEditor = ({editTask, todo, deleteTaskFunc}) => {
   // convert todo.end to a string
@@ -58,7 +57,7 @@ export const TaskEditor = ({editTask, todo, deleteTaskFunc}) => {
         
         <button type="submit" className='TaskEditButton'>Update Task</button>
       </form>
-      <Button onClick={() => deleteTaskFunc(todo.id)} icon={<img src=".././public/todo.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
+      <Button onClick={() => deleteTaskFunc(todo.id)} icon={<img src="../../public/trash_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
     </>
   )
 }
