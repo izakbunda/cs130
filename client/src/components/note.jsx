@@ -123,6 +123,7 @@ function Note({ name, noteId, onClick }) {
                     className="task-input"
                     onChange={(e) => setTaskInput(e.target.value)}
                     onKeyDown={handleEnter}
+                    autofocus
                 />
             )}
         </div>

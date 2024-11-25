@@ -21,10 +21,13 @@ function NotePage() {
     const [notes, setNotes] = useState([]);
     const [clicked, setClicked] = useState(false);
     const [points, setPoints] = useState({ x: 0, y: 0 });
-    const [options, setOptions] = useState([]);
 
-     // need to handle the actions for each option
-     const task_options = [
+    // need to handle the actions for each option
+    const options = [
+        {
+            label: "Edit Note",
+            action: () => console.log('edit note')
+        },
         {
             label: "Edit Task",
             action: () => console.log('edit task')
@@ -36,13 +39,6 @@ function NotePage() {
         {
             label: "Edit Category",
             action: () => console.log('edit category')
-        }
-    ]
-
-    const header_options = [
-        {
-            label: "Edit Name",
-            action: () => console.log('edit name')
         }
     ]
 
@@ -164,13 +160,6 @@ function NotePage() {
     const handleRightClick = (e, type) => {
         e.preventDefault();
         setPoints({ x: e.pageX, y: e.pageY });
-
-        if (type === 'header') {
-            setOptions(header_options);
-        } else  {
-            setOptions(task_options);
-        }
-
         setClicked(true);
     }
 
@@ -180,6 +169,17 @@ function NotePage() {
 
     useEffect(() => {
         fetchNotes();
+    }, []);
+    
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            setClicked(false);
+        };
+
+        document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
     }, []);
 
     return (
@@ -222,20 +222,6 @@ function NotePage() {
                     className='note-page-folder' 
                 />
                 <div className="notes-list">
-                    {creatingNote && (
-                        <div className="note-container">
-                            <div className="left-half">
-                                <img src="../../public/add_icon.svg" className='add-icon'/>
-                                <input 
-                                    type='text'
-                                    placeholder="add a new note"
-                                    className="note-input"
-                                    onChange={(e) => setNoteInput(e.target.value)}
-                                    onKeyDown={handleEnter}
-                                />
-                            </div> 
-                        </div>
-                    )}
                     {clicked && (
                         <ContextMenu
                             left={points.x}
@@ -256,6 +242,21 @@ function NotePage() {
                         </div>
                         
                     ))}
+                    {creatingNote && (
+                        <div className="note-container">
+                            <div className="left-half">
+                                <img src="../../public/add_icon.svg" className='add-icon'/>
+                                <input 
+                                    type='text'
+                                    placeholder="add a new note"
+                                    className="note-input"
+                                    onChange={(e) => setNoteInput(e.target.value)}
+                                    onKeyDown={handleEnter}
+                                    autofocus
+                                />
+                            </div> 
+                        </div>
+                    )}
             </div>
         </div>
     );

@@ -7,12 +7,26 @@ import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
 import Folder from "../components/folder";
+import ContextMenu from "../components/contextMenu";
 
 function FolderPage() {
     const navigate = useNavigate();
     const [creatingFolder, setCreatingFolder] = useState(false);
     const [folderInput, setFolderInput] = useState('');
     const [folders, setFolders] = useState([]);
+    const [clicked, setClicked] = useState(false);
+    const [points, setPoints] = useState({ x: 0, y: 0 });
+
+    const options = [
+        {
+            label: "Edit Folder", 
+            action: () => console.log('edit folder')
+        },
+        {
+            label: "Delete Folder",
+            action: () => console.log('delete folder')
+        }
+    ]
 
     const [samplePet] = useState({
         name: 'Sharkie',
@@ -93,6 +107,10 @@ function FolderPage() {
         }
     };
 
+    const updateFolder = async () => {
+        
+    };
+
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
             createFolder();
@@ -101,8 +119,29 @@ function FolderPage() {
         }
     };
 
+    const handleRightClick = (e) => {
+        e.preventDefault();
+        setPoints({ x: e.pageX, y: e.pageY });
+        setClicked(true);
+    };
+
+    const closeContextMenu = () => {
+        setClicked(false);
+    };
+
     useEffect(() => {
         fetchFolders();
+    }, []);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            setClicked(false);
+        };
+
+        document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
     }, []);
 
     return (
@@ -140,6 +179,25 @@ function FolderPage() {
                 </div>
             </GridLayout>
             <div className="folders-list">
+                {clicked && (
+                    <ContextMenu
+                        left={points.x}
+                        top={points.y}
+                        options={options}
+                        onClose={closeContextMenu}
+                    />
+                )}
+                {folders.map((folder) => (
+                    <div onContextMenu={(e) => handleRightClick(e)}>
+                        <Folder
+                            key={folder._id}
+                            name={folder.name}
+                            notesNumber={folder.notes.length}
+                            onClick={() => navigate('/note', { state: folder })}
+                            className='folder-page-folder'
+                        /> 
+                    </div>
+                ))}
                 {creatingFolder && (
                     <div className="folder-container">
                         <div className="left-half">
@@ -154,14 +212,6 @@ function FolderPage() {
                         </div>
                     </div>
                 )}
-                {folders.map((folder) => (
-                    <Folder
-                        key={folder._id}
-                        name={folder.name}
-                        notesNumber={folder.notes.length}
-                        onClick={() => navigate('/note', { state: folder })}
-                        className='folder-page-folder'/> 
-                ))}
             </div>
             
         </div>
