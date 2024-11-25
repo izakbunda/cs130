@@ -5,11 +5,6 @@ import "../css/task.css";
 
 export const Task = ({ taskText, startDate, dueDate }) => {
     const [checked, setChecked] = useState(false);
-    console.log(taskText, "start", startDate);
-    console.log(taskText, "dueda", dueDate);
-    if (dueDate == null) {
-        console.log("null!");
-    }
 
     return (
         <div className='task-container'>
