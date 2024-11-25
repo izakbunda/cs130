@@ -20,7 +20,7 @@
     transition: width 0.5s ease-in-out;
 }
 
-.progress-text {
+.task-progress-text {
     text-align: start;
     font-weight: 'bold';
     width: 25%;

@@ -70,7 +70,7 @@ export const TaskProgressBar = ({ startDate, endDate }) => {
       <div className='bar-background'>
         <div className='bar-progress' style={{ width: `${progress}%`}}> </div>
       </div>
-      <h6 className='progress-text'>{timeRemaining}</h6>
+      <h6 className='task-progress-text'>{timeRemaining}</h6>
     </div>
   );
 };
