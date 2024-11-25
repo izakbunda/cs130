@@ -24,6 +24,8 @@ function LoginPage() {
       console.log("already logged in - go back to landing");
       // Redirect user to landing page or dashboard
       navigate("/landing");
+    } else {
+      console.log("ur good");
     }
   }, []);
 
@@ -44,6 +46,7 @@ function LoginPage() {
 
     if (loggedIn.token) {
       localStorage.setItem("jwt", loggedIn.token);
+      localStorage.setItem("user_id", loggedIn.user._id);
       navigate("/landing");
     }
     // no email found in db
@@ -72,6 +75,7 @@ function LoginPage() {
 
     if (registered.token) {
       localStorage.setItem("jwt", registered.token);
+      localStorage.setItem("user_id", registered.user._id);
       navigate("/landing");
     }
   };
