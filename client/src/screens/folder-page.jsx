@@ -25,7 +25,7 @@ function FolderPage() {
         },
         {
             label: "Delete Folder",
-            action: () => console.log('delete folder')
+            action: () => deleteFolder(folderId)
         }
     ]
 
