@@ -1,3 +1,47 @@
-.completed{
+.task-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.checkbox-container {
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+}
+
+.checkbox {
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    color: var(--primary-color);
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--primary-color);
+    transform: translateY(5px);
+
+    display: grid;
+    place-content: center;
+}
+
+.checkbox::before {
+    content: ""; 
+    width: 7px;
+    height: 7px;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 10px 10px var(--primary-color);
+}
+
+.checkbox:checked::before {
+    transform: scale(1);
+}
+
+.task-text {
+    margin: 0px; 
+}
+
+.task-text-completed{
+    margin: 0px; 
     text-decoration: line-through;
 }

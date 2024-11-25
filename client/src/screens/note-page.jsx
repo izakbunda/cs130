@@ -1,21 +1,56 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 import GridLayout from "react-grid-layout";
 import "../css/index.css";
 import "../css/folder-grid.css";
+import "../css/folder.css";
 import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
-import {Folder} from "../components/folder";
+import Folder from "../components/folder";
+import Note from "../components/note"
+import ContextMenu from "../components/contextMenu";
 
 function NotePage() {
+    const navigate = useNavigate(); 
+    const location = useLocation(); // to get folder name
+    const folder = location.state;
+
+    const [creatingNote, setCreatingNote] = useState(false);
+    const [noteInput, setNoteInput] = useState('');
+    const [notes, setNotes] = useState([]);
+    const [clicked, setClicked] = useState(false);
+    const [points, setPoints] = useState({ x: 0, y: 0 });
+    const [options, setOptions] = useState([]);
+
+     // need to handle the actions for each option
+     const task_options = [
+        {
+            label: "Edit Task",
+            action: () => console.log('edit task')
+        },
+        {
+            label: "Edit Due Date",
+            action: () => console.log('edit due date')
+        },
+        {
+            label: "Edit Category",
+            action: () => console.log('edit category')
+        }
+    ]
+
+    const header_options = [
+        {
+            label: "Edit Name",
+            action: () => console.log('edit name')
+        }
+    ]
+
     const [samplePet] = useState({
         name: 'Sharkie',
         level: 13,
         exp: 600,
     });
-
-    const navigate = useNavigate(); 
 
     const layoutFolder = [
         { i: "pet", x: 0, y: 0, w: 4, h: 2, static: true },
@@ -31,6 +66,121 @@ function NotePage() {
         rowHeight: 40, 
         width: 406, 
     };
+
+    const fetchNotes = async () => {
+        try {
+            const folderId = folder._id;
+            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
+
+            const data = await resp.json();
+            setNotes(data);
+        } catch (error) {
+            alert("Failed to fetch notes, please try again.");
+            console.error("Error fetching notes:", error);
+        }
+    }; 
+
+    const createNote = async () => {
+        if (!noteInput.trim()) {
+            alert("Note name cannot be empty.");
+            return;
+        }
+
+        try {
+            const folderId = folder._id;
+            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: noteInput })
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
+
+            const newNote = await resp.json();
+            console.log(newNote);
+
+            // update notes
+            setNotes((prevNotes) => [...prevNotes, newNote]);
+        } catch (error) {
+            alert("Failed to create note. Please try again.");
+            console.error("Error creating note:", error);
+        }
+    };
+
+    const deleteNote = async (noteId) => {
+        try {
+            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+                method: "DELETE"
+            });
+            
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            };
+
+            // remove note from local state
+            setNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
+        } catch (error) {
+            alert("Failed to delete note, please try again.");
+            console.error("Failed to delete note:", error);
+        }
+    };
+
+    const updateNote = async () => {
+        try {
+            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: noteInput })
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            };
+
+             
+        } catch (error) {
+            alert("Failed to update note, please try again.");
+            console.error("Faild to update note:", error);
+        }
+    };
+
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            createNote();
+            setNoteInput("");
+            setCreatingNote(false);
+        }
+    };
+
+    const handleRightClick = (e, type) => {
+        e.preventDefault();
+        setPoints({ x: e.pageX, y: e.pageY });
+
+        if (type === 'header') {
+            setOptions(header_options);
+        } else  {
+            setOptions(task_options);
+        }
+
+        setClicked(true);
+    }
+
+    const closeContextMenu = () => {
+        setClicked(false);
+    };
+
+    useEffect(() => {
+        fetchNotes();
+    }, []);
 
     return (
         <div className="folder-page-container">
@@ -49,8 +199,8 @@ function NotePage() {
                 <div key="buttons" className="grid-item">
                     <div className="button-container">
                     <Button
-                        icon={<img src="../public/add_notes_icon.svg" alt="Add Folder Icon" style={{ width: '25px', height: '25px' }} />}
-                        onClick={() => console.log('Add Folder clicked!')}
+                        icon={<img src="../public/add_notes_icon.svg" alt="Add Note Icon" style={{ width: '25px', height: '25px' }} />}
+                        onClick={() => setCreatingNote(true)}
                         noOutline
                         className="folder-button large-icon"
                     />
@@ -66,18 +216,47 @@ function NotePage() {
                     <ProgressBar currentExp={samplePet.exp} level={samplePet.level} page="Folder" />
                 </div>
             </GridLayout>
-            <Folder name="Folder 1" />
-            <Button 
-                text="Temporary note" 
-                onClick={() => navigate('/folder')} 
-                icon={<img src="../../public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
-            />
-            <Button 
-                text="Temporary note" 
-                onClick={() => navigate('/folder')} 
-                icon={<img src="../../public/folder_icon.svg" alt="icon" style={{ width: '25px', height: '25px' }} />} 
-            />
-            
+                <Folder 
+                    name={folder.name}
+                    onClick={() => navigate('/folder')} 
+                    className='note-page-folder' 
+                />
+                <div className="notes-list">
+                    {creatingNote && (
+                        <div className="note-container">
+                            <div className="left-half">
+                                <img src="../../public/add_icon.svg" className='add-icon'/>
+                                <input 
+                                    type='text'
+                                    placeholder="add a new note"
+                                    className="note-input"
+                                    onChange={(e) => setNoteInput(e.target.value)}
+                                    onKeyDown={handleEnter}
+                                />
+                            </div> 
+                        </div>
+                    )}
+                    {clicked && (
+                        <ContextMenu
+                            left={points.x}
+                            top={points.y}
+                            options={options}
+                            onClose={closeContextMenu}
+                        />
+                    )}
+                    {notes.map((note) => (
+                        <div onContextMenu={(e) => handleRightClick(e, "task")}>
+                            <Note
+                                key={note._id}
+                                name={note.name}
+                                noteId={note._id}
+                                onClick={deleteNote}
+                                
+                            />
+                        </div>
+                        
+                    ))}
+            </div>
         </div>
     );
 }

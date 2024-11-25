@@ -1,25 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react';
 import {ProgressBar} from './progressBar';
 import Button from "../components/button";
+import "../css/task.css";
 
-export const Task = ({todo, editTask, toggleComplete}) => {
-  return (
-    <div className="Task">
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={() => toggleComplete(todo.id)}
-        />
-        <p className={`${todo.completed ? "completed" : "incompleted"}`} onClick={() => toggleComplete(todo.id)}>{todo.todo}</p>
-        <div>
-          <Button onClick={() => editTask(todo.id)} icon={<img src=".././public/todo.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
+export const Task = ({ taskText }) => {
+    const [checked, setChecked] = useState(false);
+
+    return (
+        <div className='task-container'>
+            <div className='checkbox-container'>
+                <input 
+                    type="checkbox" 
+                    className='checkbox'
+                    onChange={() => {
+                        setChecked(!checked)
+                    }}/> 
+            </div>
+            <div className='task-name-container'>
+                <p className={`${checked ? "task-text-completed" : "task-text"}`}>{taskText}</p>
+            </div>
         </div>
-        {todo.end == null ? (
-          <></>
-        ) : (
-          <ProgressBar startDate={todo.start} endDate={todo.end} />
-        )}
-        
-    </div>
-  )
+    )
 }

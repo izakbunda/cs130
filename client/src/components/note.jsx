@@ -1,97 +1,132 @@
-import {Task} from "./task";
-import {v4 as uuidv4} from "uuid";
-import React, {useState} from "react";
-import {TaskAdder} from "./taskAdder";
-import {TaskEditor} from "./taskEditor";
-import Button from "../components/button";
+import React, { useEffect, useState, useRef } from "react";
+import { Task } from "./task";
 
 import '../css/task.css';
+import '../css/note.css';
 
+function Note({ name, noteId, onClick }) {
+    const [tasks, setTasks] = useState([]);
+    const [creatingTask, setCreatingTask] = useState(false);
+    const [taskInput, setTaskInput] = useState('');
+    const [clickedOnce, setClickedOnce] = useState(false);
+    const buttonRef = useRef(null);
 
-export const Note = ({deleteNoteFunc, noteInfo}) => {
-  // track states (list of tasks)
-  const [tasks, setTasks] = useState([]);
-  const [isAdding, setIsAdding] = useState(false);
+    const handleClick = () => {
+        if (!clickedOnce) {
+            setClickedOnce(true);
+        } else {
+            if (onClick) { 
+                onClick(noteId); 
+            }
+        }
+    };
 
-  // add a Task to the list
-  const addTask = (task, startDate, endDate) => {
-    setTasks([...tasks, { 
-      id: uuidv4(), 
-      todo: task, 
-      start: startDate,
-      end: endDate,
-      completed: false, 
-      isEditing: false },
-    ]);
-  }
+    const fetchTasks = async () => {
+        try {
+            const resp = await fetch(`http://localhost:3001/tasks/${noteId}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
 
-  // toggle task adder
-  const toggleIsAdding = () => {
-    setIsAdding(!isAdding);
-  }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-  // delete a Task from the list
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => 
-      task.id !== id
-    ));
-  };
+            const data = await resp.json();
+            setTasks(data);
+        } catch (error) {
+            alert("Failed to fetch notes, please try again later");
+            console.error("Error fetching tasks:", error);
+        }
+    };
 
+    const createTask = async () => {
+        if (!taskInput.trim()) {
+            alert("Task cannot be empty.");
+            return;
+        }
 
-  // toggle if a task is Complete or not
-  const toggleComplete = (id) => {
-    setTasks(tasks.map((task) => 
-        task.id === id ? { ...task, completed: !task.completed } : task
-    ));
-  }
+        try {
+            const resp = await fetch(`http://localhost:3001/tasks/${noteId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: taskInput })
+            });
 
-  // request to edit a task name
-  const editTask = (id) => {
-    setTasks(tasks.map((task) => 
-        task.id === id ? { ...task, isEditing: !task.isEditing } : task
-    ));
-  }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-  // submit new task name
-  const editTodo = (newName, newDueDate, id) => {
-    setTasks(tasks.map((task) => 
-        task.id === id ? { ...task, todo: newName, end: newDueDate, isEditing: !task.isEditing } : task
-    ));
-  };
+            const newTask = await resp.json();
 
-  // return UI component of folder
+            // update Tasks
+            setTasks((prevTasks) => [...prevTasks, newTask]);
+        } catch (error) {
+            alert("Failed to create task. Please try again.");
+            console.error("Error creating task:", error);
+        }
+    }
 
-  return (
-    <div className="rounded-button">
-      <Button onClick={() => toggleIsAdding()} icon={<img src="../../public/add_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
-      <p>{noteInfo.title}</p>
-      <h6>{noteInfo.title}</h6>
-      <Button onClick={() => deleteNoteFunc(noteInfo.id)} icon={<img src="../../public/trash_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
-      {tasks.map((task) =>
-        task.isEditing ? (
-          <>
-            <Task
-              key={task.id}
-              todo={task}
-              editTask={editTask}
-              toggleComplete={toggleComplete}
-            />
-            <TaskEditor editTask={editTodo} todo={task} deleteTaskFunc={deleteTask}/>
-          </>
-        ) : (
-          <Task
-            key={task.id}
-            todo={task}
-            editTask={editTask}
-            toggleComplete={toggleComplete}
-          />
-        )
-      )}
-      {isAdding ? (
-        <TaskAdder addTask={addTask} />
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            createTask();
+            setTaskInput("");
+            setCreatingTask(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (buttonRef.current && !buttonRef.current.contains(event.target)) {
+                setClickedOnce(false);
+            }
+        };
+
+        document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
+    }, []);
+
+    return (
+        <div className="note-container">
+            <div className="header-container">
+                <div className="left-half">
+                    <img 
+                        src="../../public/add_icon.svg" 
+                        className='add-icon' 
+                        onClick={() => setCreatingTask(!creatingTask)}
+                    />
+                    <h4>{name}</h4>
+                </div>
+                <div 
+                    ref={buttonRef}
+                    className={['right-half', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
+                    onClick={handleClick}
+                >
+                    <img src="../../public/trash_icon.svg" className='trash-icon'/>
+                </div>
+            </div>
+            {tasks.map((task) => {
+                return(
+                    <Task key={task._id} taskText={task.name}/>
+                );
+            })}
+            {creatingTask && (
+                <input 
+                    type="text"
+                    placeholder="add a new task!"
+                    className="task-input"
+                    onChange={(e) => setTaskInput(e.target.value)}
+                    onKeyDown={handleEnter}
+                />
+            )}
+        </div>
+    )
 };
+
+export default Note;

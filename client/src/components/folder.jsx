@@ -1,56 +1,53 @@
-import React, {useState} from "react";
-import {v4 as uuidv4} from "uuid";
-import {Note} from "./note";
-import { NoteAdder } from "./noteAdder";
-
-import Button from "../components/button";
-
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes, { bool } from 'prop-types';
 import '../css/folder.css';
+import '../css/index.css';
 
+function Folder({ name, notesNumber, onClick, className }) {
+    const [clickedOnce, setClickedOnce] = useState(false);
+    const folderRef = useRef(null);
 
-export const Folder = ({name}) => {
-    const [notes, setNotes] = useState([]);
-    const [isExpanded, setIsExpanded] = useState(true);
-    const [isAdding, setIsAdding] = useState(false);
-
-    const addNote = (noteName) => {
-        if (noteName) {
-            setNotes([...notes, {
-                id: uuidv4(),
-                title: noteName,
-            }])
+    const handleClick = () => {
+        if (!clickedOnce) {
+            setClickedOnce(true);
+        } else {
+            if (onClick) {
+                onClick(); 
+            }
+            console.log('Second click action!');
         }
-    }
-    const deleteNote = (id) => {
-        setNotes(notes.filter((note) => 
-            note.id != id
-        ));
-    }
+    };
 
-    const toggleIsAdding = () => {
-        setIsAdding(!isAdding);
-    }
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (folderRef.current && !folderRef.current.contains(event.target)) {
+                setClickedOnce(false);
+            }
+        };
+
+        document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
+    }, []);
 
     return (
-        <>
-            <div className='folder-header' >
+        <div 
+            ref={folderRef}
+            className={['folder-container', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
+            onClick={handleClick}
+        >
+            <div className="left-half">
                 <img src="../../public/folder_icon.svg" className='folder-icon'/>
-                <h4>Top {name}</h4>
-                <Button className='temp-button' onClick={toggleIsAdding} icon={<img src="../../public/add_folder_icon.svg" alt="icon" style={{ width: '20px', height: '20px' }} />} />
-                
+                <h4>{name}</h4>
             </div>
-            <div className='notes-section'>
-                {notes.map((note) => 
-                    <Note noteInfo={note} deleteNoteFunc={deleteNote}/>
-                )}
-                {isAdding ? (
-                    <NoteAdder addNote={addNote} testing="test"/>
-                ) : (
-                    <></>
-                )}
-                <p>Bottom</p>
-            </div>
-        </>
+            {className === 'folder-page-folder' && 
+                <div className="right-half">
+                    <p className="notes-number">{notesNumber}</p>
+                </div>
+            }
+        </div>
     )
-}
+};
 
+export default Folder;
