@@ -5,10 +5,6 @@ export const TaskProgressBar = ({ startDate, endDate }) => {
   const [progress, setProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState('');
 
-  console.log("progressBar")
-  console.log("start: ", startDate);
-  console.log("end:", endDate);
-
   // Calculate the total duration and progress percentage
   const calculateProgress = () => {
     const start = new Date(startDate).getTime();
