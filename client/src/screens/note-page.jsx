@@ -161,6 +161,7 @@ function NotePage() {
         e.preventDefault();
         setPoints({ x: e.pageX, y: e.pageY });
         setClicked(true);
+        console.log(document.elementFromPoint(e.pageX, e.pageY).id);
     }
 
     const closeContextMenu = () => {

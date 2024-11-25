@@ -3,10 +3,9 @@ import PropTypes, { bool } from 'prop-types';
 import '../css/folder.css';
 import '../css/index.css';
 
-function Folder({ name, notesNumber, onClick, className }) {
+function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing }) {
     const [clickedOnce, setClickedOnce] = useState(false);
     const [folderName, setFolderName] = useState(name);
-    const [isEditing, setIsEditing] = useState(false);
     const folderRef = useRef(null);
 
     const handleClick = () => {
@@ -32,9 +31,9 @@ function Folder({ name, notesNumber, onClick, className }) {
         setIsEditing(false);
         if (folderName.trim() && folderName !== name) {
             console.log("call parent handler");
-            // await onUpdateFolderName(folder._id, folderName); // Call parent handler
+            await onUpdateFolderName(id, folderName); // Call parent handler
         } else {
-            setFolderName(folder.name); // Revert to original name if no change
+            setFolderName(name); // Revert to original name if no change
         }
     }
 
@@ -54,12 +53,13 @@ function Folder({ name, notesNumber, onClick, className }) {
     return (
         <div 
             ref={folderRef}
+            id={id}
             className={['folder-container', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
             onClick={handleClick}
         >
-            <div className="left-half">
-                <img src="../../public/folder_icon.svg" className='folder-icon'/>
-                {isEditing ? (
+            <div className="left-half" id={id}>
+                <img src="../../public/folder_icon.svg" className='folder-icon' id={id}/>
+                {editing ? (
                     <input
                         type='text'
                         value={folderName}
@@ -70,15 +70,12 @@ function Folder({ name, notesNumber, onClick, className }) {
                         className="folder-input"
                     />
                 ):(
-                    <div onDoubleClick={() => setIsEditing(true)}>
-                        <h4>{name}</h4>
-                    </div>
-                    
+                    <h4 id={id}>{name}</h4>
                 )}
             </div>
             {className === 'folder-page-folder' && 
-                <div className="right-half">
-                    <p className="notes-number">{notesNumber}</p>
+                <div className="right-half" id={id}>
+                    <p className="notes-number" id={id}>{notesNumber}</p>
                 </div>
             }
         </div>
