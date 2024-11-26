@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/index.css";
 import "../css/pet-page.css";
@@ -18,47 +18,98 @@ function PetPage() {
   ];
 
   const positions = [
-    { transform: "translate(-120px, -20px) scale(0.9)", zIndex: 1 }, // Left-back
-    { transform: "translate(0, 0) scale(1)", zIndex: 4 }, // Center-forward
-    { transform: "translate(120px, -20px) scale(0.9)", zIndex: 2 }, // Right-back
+    {
+      // Left-back
+      transform: "translate(-120px, -20px) scale(0.9)",
+      zIndex: 1,
+      type: "sharkie",
+    },
+    {
+      // Center-forward
+      transform: "translate(0, 0) scale(1)",
+      zIndex: 4,
+      type: "froggy",
+    },
+    {
+      // Right-back
+      transform: "translate(120px, -20px) scale(0.9)",
+      zIndex: 2,
+      type: "kitty",
+    },
   ];
+
+  // logic to return user to landing screen if already has a pet
+  useEffect(() => {
+    const pet = localStorage.getItem("pet");
+    if (pet) {
+      console.log("already have a pet - go back to landing");
+      // Redirect user to landing page or dashboard
+      navigate("/landing");
+    } else {
+      console.log("ur good");
+    }
+  }, []);
 
   const handleRotate = () => {
     setPositionIndex((prevIndex) => (prevIndex + 1) % 3);
   };
 
-  // const createPet = async () => {
-  //   try {
-  //     const userId = getUserId();
-  //     const resp = await fetch(`http://localhost:3001/folders/${userId}`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ name: folderInput }),
-  //     });
+  const getUserId = () => {
+    const userId = localStorage.getItem("user_id"); // Replace "userId" with the actual key used to store it
+    if (!userId) {
+      console.error("User ID not found in local storage.");
+      return null;
+    }
+    return userId;
+  };
 
-  //     if (!resp.ok) {
-  //       throw new Error(`Error: ${response.status} ${response.statusText}`);
-  //     }
+  const createPet = async () => {
+    try {
+      const userId = getUserId();
+      const petType = positions[positionIndex].type;
 
-  //     const newFolder = await resp.json();
-  //     console.log(newFolder);
+      if (!petName || !petType) {
+        // alert("Please provide a valid pet name and type.");
+        return;
+      }
 
-  //     // update folders
-  //     setFolders((prevFolders) => [...prevFolders, newFolder]);
-  //   } catch (error) {
-  //     alert("Failed to create folder. Please try again.");
-  //     console.error("Error creating folder:", error);
-  //   }
-  // };
+      const resp = await fetch(`http://localhost:3001/pets/${userId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: petName, type: petType }),
+      });
 
-  const handleNavigateToLanding = () => {
-    // first check if the pet is named
+      if (!resp.ok) {
+        console.log(resp);
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const newPet = await resp.json();
+      console.log(newPet);
+
+      localStorage.setItem("pet", JSON.stringify(newPet));
+      localStorage.setItem("pet_id", newPet._id);
+      // alert("Pet created successfully!");
+    } catch (error) {
+      // alert("Failed to create pet. Please try again.");
+      console.error("Error creating pet:", error);
+    }
+  };
+
+  const handleNavigateToLanding = async () => {
     if (petName) {
       setMissingName(false);
-      // POST - createPet
-      // createPet();
-      // replace with pet type here
-      navigate("/landing");
+
+      try {
+        console.log("creating pet");
+        await createPet(); // wait for pet creation to complete
+        console.log("pet made, let's go");
+
+        navigate("/landing"); //
+      } catch (error) {
+        console.error("Error navigating to landing:", error);
+        // alert("Failed to navigate. Please try again.");
+      }
     } else {
       setMissingName(true);
     }
@@ -73,7 +124,6 @@ function PetPage() {
             // Calculate new position based on current index + rotation offset
             const newIndex = (index + positionIndex) % 3;
             const style = positions[newIndex];
-
             return (
               <div
                 key={pet.name}

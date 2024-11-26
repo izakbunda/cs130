@@ -47,6 +47,17 @@ function LoginPage() {
     if (loggedIn.token) {
       localStorage.setItem("jwt", loggedIn.token);
       localStorage.setItem("user_id", loggedIn.user._id);
+
+      console.log(loggedIn.user.pets);
+
+      if (loggedIn.user.pets.length > 0) {
+        // console.log(
+        //   "saving this pet into ur localstorage ",
+        //   JSON.stringify(loggedIn.user.pets[0])
+        // );
+        localStorage.setItem("pet_id", loggedIn.user.pets[0]);
+      }
+
       navigate("/landing");
     }
     // no email found in db
@@ -76,7 +87,8 @@ function LoginPage() {
     if (registered.token) {
       localStorage.setItem("jwt", registered.token);
       localStorage.setItem("user_id", registered.user._id);
-      navigate("/landing");
+
+      navigate("/");
     }
   };
 
