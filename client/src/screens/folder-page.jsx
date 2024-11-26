@@ -17,11 +17,15 @@ function FolderPage() {
     const [clicked, setClicked] = useState(false);
     const [points, setPoints] = useState({ x: 0, y: 0 });
     const [folderId, setFolderId] = useState('');
+    const [editFolderId, setEditFolderId] = useState('');
 
     const options = [
         {
             label: "Edit Folder", 
-            action: () => {console.log('edit folder');}
+            action: () => {
+                console.log('edit folder', folderId);
+                setEditFolderId(folderId);
+            }
         },
         {
             label: "Delete Folder",
@@ -143,19 +147,23 @@ function FolderPage() {
                 throw new Error(`Error: ${resp.status} ${resp.statusText}`);
             }
 
-            const updatedFolder = await resp.json;
+            const updatedFolder = await resp.json();
 
             // Update the folder in the local state
             setFolders((prevFolders) =>
-                prevFolders.map((folder) =>
-                    folder._id === updatedFolder.folder._id ? updatedFolder.folder : folder
-                )
+                prevFolders.map((folder) => {
+                    folder._id === updatedFolder._id ? updatedFolder : folder
+        })
             );
         } catch (error) {
             alert("Failed to update folder. Please try again.");
             console.error("Error updating folder:", error);
         }
     };
+
+    const resetFolderEditing = () => {
+        setEditFolderId('');
+    }
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
@@ -246,6 +254,9 @@ function FolderPage() {
                             onClick={() => navigate('/note', { state: folder })}
                             onUpdateFolderName={updateFolder}
                             className='folder-page-folder'
+                            editing={folder._id === editFolderId ? true : false}
+                            editingFolderId={editFolderId}
+                            resetFolderEdit={resetFolderEditing}
                         /> 
                     </div>
                 ))}

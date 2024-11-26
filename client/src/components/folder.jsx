@@ -3,7 +3,7 @@ import PropTypes, { bool } from 'prop-types';
 import '../css/folder.css';
 import '../css/index.css';
 
-function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing }) {
+function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing, editingFolderId, resetFolderEdit }) {
     const [clickedOnce, setClickedOnce] = useState(false);
     const [folderName, setFolderName] = useState(name);
     const folderRef = useRef(null);
@@ -21,9 +21,12 @@ function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className,
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
-            createFolder();
-            setFolderInput("");
-            setCreatingFolder(false);
+            // createFolder();
+            // setFolderInput("");
+            // setCreatingFolder(false);
+            resetFolderEdit();
+            onUpdateFolderName(editingFolderId, folderName);
+
         }
     };
 
