@@ -6,7 +6,6 @@ import ProgressBar from "../components/progress-bar";
 import PetIcon from "../components/pet";
 import Button from "../components/button";
 import MotivationalMessage from "../components/motivation";
-import Pet from "../../../server/models/Pet";
 
 function Landing() {
   const [pet, setPet] = useState({
