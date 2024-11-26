@@ -3,7 +3,7 @@ import PropTypes, { bool } from 'prop-types';
 import '../css/folder.css';
 import '../css/index.css';
 
-function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing, editingFolderId, resetFolderEdit }) {
+function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing, endEditing }) {
     const [clickedOnce, setClickedOnce] = useState(false);
     const [folderName, setFolderName] = useState(name);
     const folderRef = useRef(null);
@@ -21,24 +21,20 @@ function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className,
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
-            // createFolder();
-            // setFolderInput("");
-            // setCreatingFolder(false);
-            resetFolderEdit();
-            onUpdateFolderName(editingFolderId, folderName);
-
-        }
-    };
-
-    const handleBlur = async () => {
-        setIsEditing(false);
-        if (folderName.trim() && folderName !== name) {
-            console.log("call parent handler");
-            await onUpdateFolderName(id, folderName); // Call parent handler
-        } else {
-            setFolderName(name); // Revert to original name if no change
-        }
+            onUpdateFolderName(id, folderName);
+            endEditing();
+        };
     }
+
+    // const handleBlur = async () => {
+    //     setIsEditing(false);
+    //     if (folderName.trim() && folderName !== name) {
+    //         console.log("call parent handler");
+    //         await onUpdateFolderName(id, folderName); // Call parent handler
+    //     } else {
+    //         setFolderName(name); // Revert to original name if no change
+    //     }
+    // }
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -67,13 +63,12 @@ function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className,
                         type='text'
                         value={folderName}
                         onChange={(e) => setFolderName(e.target.value)}
-                        onBlur={handleBlur}
                         onKeyDown={handleEnter}
                         autoFocus
                         className="folder-input"
                     />
                 ):(
-                    <h4 id={id}>{name}</h4>
+                    <h4 id={id}>{folderName}</h4>
                 )}
             </div>
             {className === 'folder-page-folder' && 

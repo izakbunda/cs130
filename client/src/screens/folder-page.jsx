@@ -17,14 +17,13 @@ function FolderPage() {
     const [clicked, setClicked] = useState(false);
     const [points, setPoints] = useState({ x: 0, y: 0 });
     const [folderId, setFolderId] = useState('');
-    const [editFolderId, setEditFolderId] = useState('');
+    const [editFolder, setEditFolder] = useState(false);
 
     const options = [
         {
             label: "Edit Folder", 
             action: () => {
-                console.log('edit folder', folderId);
-                setEditFolderId(folderId);
+                setEditFolder(true);
             }
         },
         {
@@ -150,10 +149,10 @@ function FolderPage() {
             const updatedFolder = await resp.json();
 
             // Update the folder in the local state
-            setFolders((prevFolders) =>
-                prevFolders.map((folder) => {
+            setFolders((prevFolders) => 
+                prevFolders.map((folder) => 
                     folder._id === updatedFolder._id ? updatedFolder : folder
-        })
+                )
             );
         } catch (error) {
             alert("Failed to update folder. Please try again.");
@@ -161,8 +160,8 @@ function FolderPage() {
         }
     };
 
-    const resetFolderEditing = () => {
-        setEditFolderId('');
+    const endEditing = () => {
+        setEditFolder(false);
     }
 
     const handleEnter = (e) => {
@@ -235,45 +234,45 @@ function FolderPage() {
                     <ProgressBar currentExp={samplePet.exp} level={samplePet.level} page="Folder" />
                 </div>
             </GridLayout>
-            <div className="folders-list">
-                {clicked && (
-                    <ContextMenu
-                        left={points.x}
-                        top={points.y}
-                        options={options}
-                        onClose={closeContextMenu}
-                    />
-                )}
-                {folders.map((folder) => (
-                    <div onContextMenu={(e) => handleRightClick(e, folder)}>
-                        <Folder
-                            key={folder._id}
-                            name={folder.name}
-                            id={folder._id}
-                            notesNumber={folder.notes.length}
-                            onClick={() => navigate('/note', { state: folder })}
-                            onUpdateFolderName={updateFolder}
-                            className='folder-page-folder'
-                            editing={folder._id === folderId ? true : false}
-                        /> 
-                    </div>
-                ))}
-                {creatingFolder && (
-                    <div className="folder-container">
-                        <div className="left-half">
-                            <img src="../../public/folder_icon.svg" className='folder-icon'/>
-                            <input
-                                type='text'
-                                placeholder="add a new folder!"
-                                className="folder-input"
-                                onChange={(e) => setFolderInput(e.target.value)}
-                                onKeyDown={handleEnter}
-                            />
+                <div className="folders-list">
+                    {clicked && (
+                        <ContextMenu
+                            left={points.x}
+                            top={points.y}
+                            options={options}
+                            onClose={closeContextMenu}
+                        />
+                    )}
+                    {folders.map((folder) => 
+                        <div onContextMenu={(e) => handleRightClick(e)} key={folder._id}>
+                            <Folder
+                                key={folder._id}
+                                name={folder.name}
+                                id={folder._id}
+                                notesNumber={folder.notes.length}
+                                onClick={() => navigate('/note', { state: folder })}
+                                onUpdateFolderName={updateFolder}
+                                className='folder-page-folder'
+                                editing={(folder._id === folderId) && editFolder ? true : false}
+                                endEditing={endEditing}
+                            /> 
                         </div>
-                    </div>
-                )}
-            </div>
-            
+                    )}
+                    {creatingFolder && (
+                        <div className="folder-container">
+                            <div className="left-half">
+                                <img src="../../public/folder_icon.svg" className='folder-icon'/>
+                                <input
+                                    type='text'
+                                    placeholder="add a new folder!"
+                                    className="folder-input"
+                                    onChange={(e) => setFolderInput(e.target.value)}
+                                    onKeyDown={handleEnter}
+                                />
+                            </div>
+                        </div>
+                    )}
+                </div>
         </div>
     );
 }

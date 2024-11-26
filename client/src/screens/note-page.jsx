@@ -157,7 +157,7 @@ function NotePage() {
         }
     };
 
-    const handleRightClick = (e, type) => {
+    const handleRightClick = (e) => {
         e.preventDefault();
         setPoints({ x: e.pageX, y: e.pageY });
         setClicked(true);
@@ -232,7 +232,7 @@ function NotePage() {
                         />
                     )}
                     {notes.map((note) => (
-                        <div onContextMenu={(e) => handleRightClick(e, "task")}>
+                        <div onContextMenu={(e) => handleRightClick(e, "task")} key={note._id}>
                             <Note
                                 key={note._id}
                                 name={note.name}
