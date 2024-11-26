@@ -34,7 +34,8 @@ export const register = async (req, res) => {
 
     // send the new user back with status 201 (Created)
 
-    res.status(201).json(savedUser);
+    const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET);
+    res.status(201).json({ token, user: savedUser });
   } catch (error) {
     // send error 500 (Internal Server)
     res.status(500).json({ error: error.message });

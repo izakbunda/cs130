@@ -14,10 +14,10 @@ let pointsMapping = {
 export const createTask = async (req, res) => {
     try {
         const { noteId } = req.params;
-        const { name, dueDate, category } = req.body;
+        const { name } = req.body;
 
         // confirm required data
-        if (!name || !category || !noteId) {
+        if (!name) {
             return res.status(400).json({ message: "Required fields missing" });
         }
 
@@ -32,14 +32,17 @@ export const createTask = async (req, res) => {
             note: noteId,
             name,
             creationDate: Date.now(),
-            dueDate, // optional, if not specified it will stay null
             status: "pending", // new tasks will always be pending
-            category,
-            points: pointsMapping[category],
+            category: "easy",
+            points: pointsMapping["easy"],
         })
+
+        console.log("created");
 
         // store the new task
         const savedTask = await task.save();
+
+        console.log("saved");
 
         // add task to note's tasks arr
         note.tasks.push(task._id);

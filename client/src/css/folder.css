@@ -1,0 +1,48 @@
+.folder-container {
+    width: 100%; 
+    padding: 10px 10px; 
+    border: 2px solid #2b2b2b;
+    color: #2b2b2b;
+    border-radius: 5px; 
+    background-color: transparent; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box; 
+    text-decoration: none; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, border-color 0.2s; 
+}
+
+.clicked {
+    background-color: var(--tertiary-color);
+}
+
+.folder-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.note-page-folder {
+    justify-content: flex-start;
+    margin-bottom: 5px;
+}
+
+.folder-page-folder {
+    justify-content: flex-start;
+}
+
+.left-half {
+    display: flex;
+}
+
+.right-half {
+    display: flex; 
+    width: 20px; 
+}
+
+.notes-number {
+    margin: 0;
+    align-self: flex-end;
+}

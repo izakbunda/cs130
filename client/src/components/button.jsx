@@ -38,6 +38,7 @@ const Button = ({ text, icon, onClick, noOutline, className }) => {
     >
       {icon && <span className="button-icon">{icon}</span>}
       {text && <h4 className="button-text">{text}</h4>}
+      {className === 'folder-page-folder' && <p className='notes-number'>3</p>}
     </button>
   );
 };
@@ -57,4 +58,3 @@ Button.defaultProps = {
 };
 
 export default Button;
-

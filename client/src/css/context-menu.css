@@ -1,0 +1,26 @@
+.right-click-menu {
+    position: absolute;
+    width: 100px;
+    border: 2px solid var(--primary-color);
+    background-color: #F2F0EF; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    gap: 3px; 
+}
+
+.option {
+    font-family: var(--main-font);
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.4;
+    display: flex; 
+    width: 100%;
+    padding: 2px; 
+}
+
+.option:hover {
+    background-color: var(--tertiary-color);
+}

@@ -1,0 +1,27 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden;
+}
+
+.fixed-header {
+  background-color: #D9D9D9;
+  border-radius: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  border-color: #2B2B2B;
+  padding: 5px 5px;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.scrollable-content {
+  margin-top: 60px; /* Adjust to match the header's height */
+  overflow-y: auto;
+  flex: 1;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+}
