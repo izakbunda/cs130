@@ -12,7 +12,7 @@ function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className,
         if (!clickedOnce) {
             setClickedOnce(true);
         } else {
-            if (onClick) {
+            if (onClick && !editing) {
                 onClick(); 
             }
             console.log('Second click action!');
