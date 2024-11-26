@@ -16,15 +16,20 @@ function FolderPage() {
     const [folders, setFolders] = useState([]);
     const [clicked, setClicked] = useState(false);
     const [points, setPoints] = useState({ x: 0, y: 0 });
+    const [folderId, setFolderId] = useState('');
+    const [editFolderId, setEditFolderId] = useState('');
 
     const options = [
         {
             label: "Edit Folder", 
-            action: () => console.log('edit folder')
+            action: () => {
+                console.log('edit folder', folderId);
+                setEditFolderId(folderId);
+            }
         },
         {
             label: "Delete Folder",
-            action: () => console.log('delete folder')
+            action: () => deleteFolder(folderId)
         }
     ]
 
@@ -93,7 +98,7 @@ function FolderPage() {
             });
 
             if (!resp.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
             }
 
             const newFolder = await resp.json();
@@ -107,9 +112,58 @@ function FolderPage() {
         }
     };
 
-    const updateFolder = async () => {
-        
+    const deleteFolder = async (folderId) => {
+        try {
+            const resp = await fetch(`http://localhost:3001/folders/${folderId}`, {
+                method: "DELETE",
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
+
+            // remove folder from local state
+            setFolders((prevFolders) => prevFolders.filter((folder) => folder._id !== folderId));
+        } catch (error) {
+            alert("Failed to delete folder, please try again.");
+            console.error("Error deleting folder:", error);
+        }
     };
+ 
+    const updateFolder = async (folderId, folderName) => {
+        if (!folderName.trim()) {
+            alert("Folder name cannot be empty.");
+            return
+        }
+
+        try {
+            const resp = await fetch(`http://localhost:3001/folders/${folderId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ name: folderName })
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
+
+            const updatedFolder = await resp.json();
+
+            // Update the folder in the local state
+            setFolders((prevFolders) =>
+                prevFolders.map((folder) => {
+                    folder._id === updatedFolder._id ? updatedFolder : folder
+        })
+            );
+        } catch (error) {
+            alert("Failed to update folder. Please try again.");
+            console.error("Error updating folder:", error);
+        }
+    };
+
+    const resetFolderEditing = () => {
+        setEditFolderId('');
+    }
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
@@ -123,6 +177,9 @@ function FolderPage() {
         e.preventDefault();
         setPoints({ x: e.pageX, y: e.pageY });
         setClicked(true);
+        // fetch folder id
+        console.log(document.elementFromPoint(e.pageX, e.pageY).id);
+        setFolderId(document.elementFromPoint(e.pageX, e.pageY).id);
     };
 
     const closeContextMenu = () => {
@@ -188,13 +245,18 @@ function FolderPage() {
                     />
                 )}
                 {folders.map((folder) => (
-                    <div onContextMenu={(e) => handleRightClick(e)}>
+                    <div onContextMenu={(e) => handleRightClick(e, folder)}>
                         <Folder
                             key={folder._id}
                             name={folder.name}
+                            id={folder._id}
                             notesNumber={folder.notes.length}
                             onClick={() => navigate('/note', { state: folder })}
+                            onUpdateFolderName={updateFolder}
                             className='folder-page-folder'
+                            editing={folder._id === editFolderId ? true : false}
+                            editingFolderId={editFolderId}
+                            resetFolderEdit={resetFolderEditing}
                         /> 
                     </div>
                 ))}

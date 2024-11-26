@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import "../css/task-progress-bar.css";
 
-export const ProgressBar = ({ startDate, endDate }) => {
+export const TaskProgressBar = ({ startDate, endDate }) => {
   const [progress, setProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState('');
 
@@ -61,28 +62,11 @@ export const ProgressBar = ({ startDate, endDate }) => {
   }, [startDate, endDate]);
 
   return (
-    <div style={{ width: '300px', margin: '20px' }}>
-      <div
-        style={{
-          height: '20px',
-          width: '100%',
-          backgroundColor: '#ddd',
-          borderRadius: '5px',
-          overflow: 'hidden',
-          marginBottom: '10px',
-        }}
-      >
-        <div
-          style={{
-            height: '100%',
-            width: `${progress}%`,
-            backgroundColor: '#4caf50',
-            borderRadius: '5px 0 0 5px',
-            transition: 'width 0.5s ease-in-out',
-          }}
-        ></div>
+    <div className='bar-container'>
+      <div className='bar-background'>
+        <div className='bar-progress' style={{ width: `${progress}%`}}> </div>
       </div>
-      <p style={{ textAlign: 'center', fontWeight: 'bold' }}>{timeRemaining}</p>
+      <h6 className='task-progress-text'>{timeRemaining}</h6>
     </div>
   );
 };

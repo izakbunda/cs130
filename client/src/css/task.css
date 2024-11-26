@@ -8,6 +8,7 @@
     display: grid;
     grid-template-columns: 1em auto;
     gap: 0.5em;
+    align-items: center;
 }
 
 .checkbox {
@@ -15,22 +16,21 @@
     background-color: transparent;
     margin: 0;
     color: var(--primary-color);
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border: 2px solid var(--primary-color);
-    transform: translateY(5px);
-
+    /*transform: translateY(5px);*/
     display: grid;
     place-content: center;
 }
 
 .checkbox::before {
     content: ""; 
-    width: 7px;
-    height: 7px;
+    width: 12px;
+    height: 12px;
     transform: scale(0);
     transition: 120ms transform ease-in-out;
-    box-shadow: inset 10px 10px var(--primary-color);
+    box-shadow: inset 12px 12px var(--primary-color);
 }
 
 .checkbox:checked::before {
@@ -41,7 +41,33 @@
     margin: 0px; 
 }
 
+.task-name-container {
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    margin-left: 5px;
+}
+
 .task-text-completed{
     margin: 0px; 
     text-decoration: line-through;
+}
+
+.task-progress-bar {
+    margin: 0px;
+}
+
+.category-indicator {
+    /*
+    border-radius: 10px;
+    border-color: var(--primary-color);
+    border-width: 5px;
+    */
+    width: 0px; /* Diameter of the circle */
+    height: 0px; /* Diameter of the circle */
+    border: 5px solid black; /* Thick border */
+    border-radius: 50%; /* Makes it a circle */
+    background-color: lightblue; /* Optional: background color */
+    display: inline-block; /* Ensure it behaves like a standalone block */
+    align-items: center;
 }

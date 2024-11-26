@@ -65,7 +65,7 @@ function Note({ name, noteId, onClick }) {
             alert("Failed to create task. Please try again.");
             console.error("Error creating task:", error);
         }
-    }
+    };
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
@@ -73,7 +73,7 @@ function Note({ name, noteId, onClick }) {
             setTaskInput("");
             setCreatingTask(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchTasks();
@@ -93,27 +93,29 @@ function Note({ name, noteId, onClick }) {
     }, []);
 
     return (
-        <div className="note-container">
-            <div className="header-container">
-                <div className="left-half">
+        <div className="note-container" id={noteId}>
+            <div className="header-container" id={noteId}>
+                <div className="left-half" id={noteId}>
                     <img 
                         src="../../public/add_icon.svg" 
                         className='add-icon' 
                         onClick={() => setCreatingTask(!creatingTask)}
+                        id={noteId}
                     />
-                    <h4>{name}</h4>
+                    <h4 id={noteId}>{name}</h4>
                 </div>
                 <div 
                     ref={buttonRef}
                     className={['right-half', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
                     onClick={handleClick}
+                    id={noteId}
                 >
                     <img src="../../public/trash_icon.svg" className='trash-icon'/>
                 </div>
             </div>
             {tasks.map((task) => {
                 return(
-                    <Task key={task._id} taskText={task.name}/>
+                    <Task key={task._id} id={task._id} taskText={task.name} startDate={task.creationDate} dueDate={task.dueDate} category={task.category}/>
                 );
             })}
             {creatingTask && (
