@@ -115,7 +115,7 @@ function Note({ name, noteId, onClick }) {
             </div>
             {tasks.map((task) => {
                 return(
-                    <Task key={task._id} id={task._id} taskText={task.name} startDate={task.creationDate} dueDate={task.dueDate} />
+                    <Task key={task._id} id={task._id} taskText={task.name} startDate={task.creationDate} dueDate={task.dueDate} category={task.category}/>
                 );
             })}
             {creatingTask && (

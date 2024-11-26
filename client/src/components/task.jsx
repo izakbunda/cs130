@@ -3,8 +3,14 @@ import {TaskProgressBar} from './taskProgressBar';
 import Button from "../components/button";
 import "../css/task.css";
 
-export const Task = ({ taskText, id, startDate, dueDate }) => {
+export const Task = ({ taskText, id, startDate, dueDate, category }) => {
     const [checked, setChecked] = useState(false);
+
+    const catToColor = {
+        "easy": "5px solid green",
+        "medium": "5px solid orange",
+        "hard": "5px solid red"
+    }
 
     return (
         <div className='task-container' id={id}>
@@ -23,6 +29,9 @@ export const Task = ({ taskText, id, startDate, dueDate }) => {
                 {dueDate && (
                     <TaskProgressBar startDate={startDate} endDate={dueDate} id={id}/>
                 )}
+            </div>
+            <div style={{alignItem: 'center'}}> 
+                <div className='category-indicator' style={{ border: catToColor[category] }}></div>
             </div>
         </div>
     )
