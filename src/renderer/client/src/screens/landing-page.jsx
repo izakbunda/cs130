@@ -60,8 +60,15 @@ function Landing() {
     }
   }, [navigate])
 
+  const logout = () => {
+    console.log('bye logging out')
+    localStorage.clear()
+    navigate('/login')
+  }
+
   return (
     <div className="total-margin">
+      <button onClick={() => logout()} />
       <BackButton navigateTo={'/login'} />
       <BackButton navigateTo={'/'} />
       <h1>Todogotchi</h1>
