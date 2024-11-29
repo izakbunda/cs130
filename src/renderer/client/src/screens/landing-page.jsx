@@ -15,7 +15,7 @@ function Landing() {
   const [pet, setPet] = useState({
     name: 'placeholder',
     level: 0, // Example starting level
-    exp: 0 // Example starting EXP
+    points: 0 // Example starting EXP
   })
 
   const navigate = useNavigate() // For navigation
@@ -49,15 +49,15 @@ function Landing() {
 
     const pet = localStorage.getItem('pet')
 
-    if (!pet) {
-      const pet_id = localStorage.getItem('pet_id')
+    // if (!pet) {
+    const pet_id = localStorage.getItem('pet_id')
 
-      // Fetch pet from backend if not in localStorage
-      fetchPet(pet_id)
-    } else {
-      console.log('Pet found in localStorage:', JSON.parse(pet))
-      setPet(JSON.parse(pet))
-    }
+    // Fetch pet from backend if not in localStorage
+    fetchPet(pet_id)
+    // } else {
+    //   console.log('Pet found in localStorage:', JSON.parse(pet))
+    //   setPet(JSON.parse(pet))
+    // }
   }, [navigate])
 
   const logout = () => {
@@ -74,7 +74,7 @@ function Landing() {
       <h1>Todogotchi</h1>
       <div className="landing-container">
         <InfoGrid />
-        <ProgressBar currentExp={pet.exp} level={pet.level} page="Landing" s />
+        <ProgressBar currentExp={pet.points} level={pet.level} page="Landing" s />
         <PetIcon name={pet.name} level={pet.level} exp={pet.exp} page="Landing" />
         <Button
           text="To-Do List"
