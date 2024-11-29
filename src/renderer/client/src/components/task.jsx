@@ -3,7 +3,7 @@ import {TaskProgressBar} from './taskProgressBar';
 import Button from "../components/button";
 import "../css/task.css";
 
-export const Task = ({ taskText, id, startDate, dueDate, category }) => {
+export const Task = ({ taskText, id, startDate, dueDate, category, onDelete }) => {
     const [checked, setChecked] = useState(false);
 
     const catToColor = {

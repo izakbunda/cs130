@@ -8,7 +8,7 @@ import '../css/folder-grid.css'
 import add_icon from '../assets/add_icon.svg'
 import trash_icon from '../assets/trash_icon.svg'
 
-function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) {
+function Note({ name, noteId, onDelete, editingNote, deletingTask, onUpdateNoteName, endEditing }) {
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
   const [taskInput, setTaskInput] = useState('')
@@ -20,8 +20,8 @@ function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) 
     if (!clickedOnce) {
       setClickedOnce(true)
     } else {
-      if (onClick) {
-        onClick(noteId)
+      if (onDelete) {
+        onDelete(noteId)
       }
     }
   }
@@ -72,39 +72,37 @@ function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) 
     }
   }
 
-  const deleteTask = async (taskId) => {
-    try {
-      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
-        method: 'DELETE'
-      });
-
-      if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-      }
-
-      // remove task from local state
-      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
-      
-    } catch (error) {
-      alert('Failed to delete task, please try again later');
-      console.error('Error deleting task:', error);
-    }
-  }
-
-  const updateTask = async (taskId, taskName, taskCategory) => {
-    if (!taskName.trim()) {
-      alert('Task name cannot be empty.'); 
-      return;
-    }
-
+  const updateTaskDueDate = async (taskId, dueDate) => {
     try {
       const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: taskName, category: taskCategory, })
+        body: JSON.stringify({ dueDate: dueDate})
       })
-    } catch (error) {
 
+      if (!resp.ok) {
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+      }
+    } catch (error) {
+      alert('Failed to update task, please try again later');
+      console.error('Error deleting task:', error);
+    }
+  }
+
+  const updateTaskCategory = async (taskId, category) => {
+    try {
+      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: category})
+      })
+
+      if (!resp.ok) {
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+      }
+    } catch (error) {
+      alert('Failed to update task, please try again later');
+      console.error('Error deleting task:', error);
     }
   }
 
@@ -125,7 +123,7 @@ function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) 
 
   useEffect(() => {
     fetchTasks()
-  }, [])
+  }, [deletingTask])
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -150,7 +148,7 @@ function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) 
             onClick={() => setCreatingTask(!creatingTask)}
             id={noteId}
           />
-          {editing ? (
+          {editingNote ? (
             <input
               type="text"
               value={noteName}

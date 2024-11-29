@@ -22,11 +22,15 @@ function NotePage() {
 
   const [creatingNote, setCreatingNote] = useState(false)
   const [editingNote, setEditingNote] = useState(false)
+  const [editingTask, setEditingTask] = useState(false)
+  const [editingDate, setEditingDate] = useState(false)
+  const [editingCategory, setEditingCategory] = useState(false)
+  const [deletingTask, setDeletingTask] = useState(false)
   const [noteInput, setNoteInput] = useState('')
   const [notes, setNotes] = useState([])
   const [clicked, setClicked] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
-  const [noteId, setNoteId] = useState('')
+  const [elementId, setElementId] = useState('')
 
   // need to handle the actions for each option
   const options = [
@@ -36,15 +40,22 @@ function NotePage() {
     },
     {
       label: 'Edit Task',
-      action: () => console.log('edit task')
+      action: () => setEditingTask(true)
     },
     {
       label: 'Edit Due Date',
-      action: () => console.log('edit due date')
+      action: () => setEditingDate(true)
     },
     {
       label: 'Edit Category',
-      action: () => console.log('edit category')
+      action: () => setEditingCategory(true)
+    },
+    {
+      label: 'Delete Task',
+      action: () => {
+        setDeletingTask(true);
+        deleteTask(elementId);
+      }
     }
   ]
 
@@ -153,6 +164,26 @@ function NotePage() {
     }
   }
 
+  const deleteTask = async (taskId) => {
+    try {
+      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'DELETE'
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+      }
+
+      // remove task from local state
+      // setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+
+      setDeletingTask(false);
+    } catch (error) {
+      alert('Failed to delete task, please try again later');
+      console.error('Error deleting task:', error);
+    }
+  }
+
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
       createNote()
@@ -166,7 +197,7 @@ function NotePage() {
     setPoints({ x: e.pageX, y: e.pageY })
     setClicked(true)
     console.log(document.elementFromPoint(e.pageX, e.pageY).id)
-    setNoteId(document.elementFromPoint(e.pageX, e.pageY).id)
+    setElementId(document.elementFromPoint(e.pageX, e.pageY).id)
   }
 
   const closeContextMenu = () => {
@@ -246,8 +277,9 @@ function NotePage() {
               key={note._id} 
               name={note.name} 
               noteId={note._id} 
-              onClick={deleteNote}
-              editing={note._id === noteId && editingNote ? true : false}
+              onDelete={deleteNote}
+              editingNote={note._id === elementId && editingNote ? true : false}
+              deletingTask={deletingTask}
               onUpdateNoteName={updateNote}
               endEditing={() => setEditingNote(false)}
             />
@@ -263,7 +295,7 @@ function NotePage() {
                 className="note-input"
                 onChange={(e) => setNoteInput(e.target.value)}
                 onKeyDown={handleEnter}
-                autofocus
+                autoFocus
               />
             </div>
           </div>
