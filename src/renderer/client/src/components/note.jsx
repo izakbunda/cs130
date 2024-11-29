@@ -7,12 +7,20 @@ import '../css/note.css'
 import add_icon from '../assets/add_icon.svg'
 import trash_icon from '../assets/trash_icon.svg'
 
-function Note({ name, noteId, onClick }) {
+function Note({ name, noteId, onClick, onCheckboxChange }) {
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [clickedOnce, setClickedOnce] = useState(false)
   const buttonRef = useRef(null)
+
+  const [isChecked, setIsChecked] = useState(false)
+
+  const handleCheckedBox = (checked, id) => {
+    // console.log('In note: checkbox state from child:', checked)
+    setIsChecked(checked)
+    onCheckboxChange(checked, id)
+  }
 
   const handleClick = () => {
     if (!clickedOnce) {
@@ -121,10 +129,12 @@ function Note({ name, noteId, onClick }) {
           <Task
             key={task._id}
             id={task._id}
+            status={task.status}
             taskText={task.name}
             startDate={task.creationDate}
             dueDate={task.dueDate}
             category={task.category}
+            onCheckboxChange={handleCheckedBox}
           />
         )
       })}
@@ -135,7 +145,7 @@ function Note({ name, noteId, onClick }) {
           className="task-input"
           onChange={(e) => setTaskInput(e.target.value)}
           onKeyDown={handleEnter}
-          autofocus
+          autoFocus
         />
       )}
     </div>
