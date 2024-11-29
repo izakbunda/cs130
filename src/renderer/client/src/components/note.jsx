@@ -8,7 +8,8 @@ import '../css/folder-grid.css'
 import add_icon from '../assets/add_icon.svg'
 import trash_icon from '../assets/trash_icon.svg'
 
-function Note({ name, noteId, onDelete, editingNote, deletingTask, onUpdateNoteName, endEditing }) {
+function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCategory, onUpdateNoteName, endEditing }) {
+  console.log(id)
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
   const [taskInput, setTaskInput] = useState('')
@@ -100,6 +101,8 @@ function Note({ name, noteId, onDelete, editingNote, deletingTask, onUpdateNoteN
       if (!resp.ok) {
         throw new Error(`Error: ${resp.status} ${resp.statusText}`)
       }
+
+      endEditing();
     } catch (error) {
       alert('Failed to update task, please try again later');
       console.error('Error deleting task:', error);
@@ -123,7 +126,7 @@ function Note({ name, noteId, onDelete, editingNote, deletingTask, onUpdateNoteN
 
   useEffect(() => {
     fetchTasks()
-  }, [deletingTask])
+  }, [deletingTask, editingCategory])
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -180,6 +183,8 @@ function Note({ name, noteId, onDelete, editingNote, deletingTask, onUpdateNoteN
             startDate={task.creationDate}
             dueDate={task.dueDate}
             category={task.category}
+            editingCategory={editingCategory && (task._id === id) ? true : false}
+            onEditCategory={updateTaskCategory}
           />
         )
       })}

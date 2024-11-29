@@ -3,7 +3,8 @@ import {TaskProgressBar} from './taskProgressBar';
 import Button from "../components/button";
 import "../css/task.css";
 
-export const Task = ({ taskText, id, startDate, dueDate, category, onDelete }) => {
+export const Task = ({ taskText, id, startDate, dueDate, category, editingCategory, onEditCategory }) => {
+    console.log(id)
     const [checked, setChecked] = useState(false);
 
     const catToColor = {
@@ -30,9 +31,18 @@ export const Task = ({ taskText, id, startDate, dueDate, category, onDelete }) =
                     <TaskProgressBar startDate={startDate} endDate={dueDate} id={id}/>
                 )}
             </div>
-            <div style={{alignItem: 'center'}}> 
-                <div className='category-indicator' style={{ border: catToColor[category] }}></div>
-            </div>
+            {!editingCategory && (
+                <div style={{alignItem: 'center'}}> 
+                    <div className='category-indicator' style={{ border: catToColor[category] }}></div>
+                </div>
+            )}
+            {editingCategory && (
+                <div className='category-list'>
+                    <div className='category-button easy' onClick={() => {onEditCategory(id, "easy")}}>easy</div>
+                    <div className='category-button medium' onClick={() => {onEditCategory(id, "medium")}}>medium</div>
+                    <div className='category-button hard'onClick={() => {onEditCategory(id, "hard")}}>hard</div>
+                </div>
+            )}
         </div>
     )
 }

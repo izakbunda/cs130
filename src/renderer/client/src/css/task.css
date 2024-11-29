@@ -71,3 +71,33 @@
     display: inline-block; /* Ensure it behaves like a standalone block */
     align-items: center;
 }
+
+.category-list {
+    display: flex;
+    flex-direction: row;
+    gap: 7px; 
+}
+
+.category-button {
+    display: flex;
+    font-family: var(--main-font);
+    font-size: .6rem;
+    font-weight: 400;
+    color: #F2F0EF;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.easy {
+    background-color: green;
+}
+
+.medium {
+    background-color: orange;
+}
+
+.hard {
+    background-color: red;
+}

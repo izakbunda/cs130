@@ -22,7 +22,7 @@ function NotePage() {
 
   const [creatingNote, setCreatingNote] = useState(false)
   const [editingNote, setEditingNote] = useState(false)
-  const [editingTask, setEditingTask] = useState(false)
+  const [editingTask, setEditingTask] = useState(false) // pass these into note component to trigger ui change
   const [editingDate, setEditingDate] = useState(false)
   const [editingCategory, setEditingCategory] = useState(false)
   const [deletingTask, setDeletingTask] = useState(false)
@@ -275,13 +275,15 @@ function NotePage() {
           <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
             <Note 
               key={note._id} 
+              id={elementId}
               name={note.name} 
               noteId={note._id} 
               onDelete={deleteNote}
               editingNote={note._id === elementId && editingNote ? true : false}
               deletingTask={deletingTask}
+              editingCategory={editingCategory}
               onUpdateNoteName={updateNote}
-              endEditing={() => setEditingNote(false)}
+              endEditing={() => {setEditingNote(false); setEditingCategory(false)}}
             />
           </div>
         ))}
