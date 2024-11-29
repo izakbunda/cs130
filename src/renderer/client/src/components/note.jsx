@@ -73,6 +73,23 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
     }
   }
 
+  const updateTaskName = async (taskId, taskName) => {
+    try {
+      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: taskName})
+      })
+
+      if (!resp.ok) {
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+      }
+    } catch (error) {
+      alert('Failed to update task, please try again later');
+      console.error('Error updating task:', error);
+    }
+  }
+
   const updateTaskDueDate = async (taskId, dueDate) => {
     try {
       const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
@@ -86,7 +103,7 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
       }
     } catch (error) {
       alert('Failed to update task, please try again later');
-      console.error('Error deleting task:', error);
+      console.error('Error updating task:', error);
     }
   }
 
@@ -105,7 +122,7 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
       endEditing();
     } catch (error) {
       alert('Failed to update task, please try again later');
-      console.error('Error deleting task:', error);
+      console.error('Error updating task:', error);
     }
   }
 
