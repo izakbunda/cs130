@@ -265,7 +265,7 @@ function FolderPage() {
               onClick={() => navigate('/note', { state: folder })}
               onUpdateFolderName={updateFolder}
               className="folder-page-folder"
-              editing={folder._id === folderId && editFolder ? true : false}
+              editing={folder._id === folderId && editFolder}
               endEditing={endEditing}
             />
           </div>

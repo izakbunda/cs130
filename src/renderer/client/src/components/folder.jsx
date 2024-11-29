@@ -37,16 +37,6 @@ function Folder({
     }
   }
 
-  // const handleBlur = async () => {
-  //     setIsEditing(false);
-  //     if (folderName.trim() && folderName !== name) {
-  //         console.log("call parent handler");
-  //         await onUpdateFolderName(id, folderName); // Call parent handler
-  //     } else {
-  //         setFolderName(name); // Revert to original name if no change
-  //     }
-  // }
-
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (folderRef.current && !folderRef.current.contains(event.target)) {

@@ -3,15 +3,17 @@ import { Task } from './task'
 
 import '../css/task.css'
 import '../css/note.css'
+import '../css/folder-grid.css'
 
 import add_icon from '../assets/add_icon.svg'
 import trash_icon from '../assets/trash_icon.svg'
 
-function Note({ name, noteId, onClick }) {
+function Note({ name, noteId, onClick, editing, onUpdateNoteName, endEditing }) {
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [clickedOnce, setClickedOnce] = useState(false)
+  const [noteName, setNoteName] = useState(name)
   const buttonRef = useRef(null)
 
   const handleClick = () => {
@@ -38,7 +40,7 @@ function Note({ name, noteId, onClick }) {
       const data = await resp.json()
       setTasks(data)
     } catch (error) {
-      alert('Failed to fetch notes, please try again later')
+      alert('Failed to fetch tasks, please try again later')
       console.error('Error fetching tasks:', error)
     }
   }
@@ -57,7 +59,7 @@ function Note({ name, noteId, onClick }) {
       })
 
       if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
       }
 
       const newTask = await resp.json()
@@ -70,11 +72,54 @@ function Note({ name, noteId, onClick }) {
     }
   }
 
-  const handleEnter = (e) => {
+  const deleteTask = async (taskId) => {
+    try {
+      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'DELETE'
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+      }
+
+      // remove task from local state
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+      
+    } catch (error) {
+      alert('Failed to delete task, please try again later');
+      console.error('Error deleting task:', error);
+    }
+  }
+
+  const updateTask = async (taskId, taskName, taskCategory) => {
+    if (!taskName.trim()) {
+      alert('Task name cannot be empty.'); 
+      return;
+    }
+
+    try {
+      const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: taskName, category: taskCategory, })
+      })
+    } catch (error) {
+
+    }
+  }
+
+  const handleTaskEnter = (e) => {
     if (e.key === 'Enter') {
       createTask()
       setTaskInput('')
       setCreatingTask(false)
+    }
+  }
+
+  const handleNoteEnter = (e) => {
+    if (e.key === 'Enter') {
+      onUpdateNoteName(noteId, noteName);
+      endEditing();
     }
   }
 
@@ -105,7 +150,19 @@ function Note({ name, noteId, onClick }) {
             onClick={() => setCreatingTask(!creatingTask)}
             id={noteId}
           />
-          <h4 id={noteId}>{name}</h4>
+          {editing ? (
+            <input
+              type="text"
+              value={noteName}
+              onChange={(e) => setNoteName(e.target.value)}
+              onKeyDown={handleNoteEnter}
+              autoFocus
+              className="note-input"
+            />
+          ):(
+            <h4 id={noteId}>{noteName}</h4>
+          )}
+          
         </div>
         <div
           ref={buttonRef}
@@ -134,7 +191,7 @@ function Note({ name, noteId, onClick }) {
           placeholder="add a new task!"
           className="task-input"
           onChange={(e) => setTaskInput(e.target.value)}
-          onKeyDown={handleEnter}
+          onKeyDown={handleTaskEnter}
           autofocus
         />
       )}

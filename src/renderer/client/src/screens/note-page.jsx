@@ -21,16 +21,18 @@ function NotePage() {
   const folder = location.state
 
   const [creatingNote, setCreatingNote] = useState(false)
+  const [editingNote, setEditingNote] = useState(false)
   const [noteInput, setNoteInput] = useState('')
   const [notes, setNotes] = useState([])
   const [clicked, setClicked] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
+  const [noteId, setNoteId] = useState('')
 
   // need to handle the actions for each option
   const options = [
     {
       label: 'Edit Note',
-      action: () => console.log('edit note')
+      action: () => setEditingNote(true)
     },
     {
       label: 'Edit Task',
@@ -134,12 +136,12 @@ function NotePage() {
     }
   }
 
-  const updateNote = async () => {
+  const updateNote = async (noteId, noteName) => {
     try {
       const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: noteInput })
+        body: JSON.stringify({ name: noteName })
       })
 
       if (!resp.ok) {
@@ -164,6 +166,7 @@ function NotePage() {
     setPoints({ x: e.pageX, y: e.pageY })
     setClicked(true)
     console.log(document.elementFromPoint(e.pageX, e.pageY).id)
+    setNoteId(document.elementFromPoint(e.pageX, e.pageY).id)
   }
 
   const closeContextMenu = () => {
@@ -239,7 +242,15 @@ function NotePage() {
         )}
         {notes.map((note) => (
           <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
-            <Note key={note._id} name={note.name} noteId={note._id} onClick={deleteNote} />
+            <Note 
+              key={note._id} 
+              name={note.name} 
+              noteId={note._id} 
+              onClick={deleteNote}
+              editing={note._id === noteId && editingNote ? true : false}
+              onUpdateNoteName={updateNote}
+              endEditing={() => setEditingNote(false)}
+            />
           </div>
         ))}
         {creatingNote && (
