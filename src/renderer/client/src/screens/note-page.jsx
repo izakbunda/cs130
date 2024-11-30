@@ -193,15 +193,23 @@ function NotePage() {
   }
 
   const handleRightClick = (e) => {
+    endEditing()
     e.preventDefault()
     setPoints({ x: e.pageX, y: e.pageY })
     setClicked(true)
-    console.log(document.elementFromPoint(e.pageX, e.pageY).id)
+    //console.log('right click: ', document.elementFromPoint(e.pageX, e.pageY).id)
     setElementId(document.elementFromPoint(e.pageX, e.pageY).id)
   }
 
+  const endEditing = () => {
+    setEditingNote(false); 
+    setEditingTask(false); 
+    setEditingDate(false); 
+    setEditingCategory(false);
+  }
+
   const closeContextMenu = () => {
-    setClicked(false)
+    setClicked(false);
   }
 
   useEffect(() => {
@@ -263,14 +271,24 @@ function NotePage() {
       </GridLayout>
       <Folder name={folder.name} onClick={() => navigate('/folder')} className="note-page-folder" />
       <div className="notes-list">
-        {clicked && (
+        {clicked && notes.some(note => note._id === elementId) && (
           <ContextMenu
             left={points.x}
             top={points.y}
-            options={options}
+            options={[options[0]]}
             onClose={closeContextMenu}
           />
-        )}
+          )
+        }
+        {clicked && (!notes.some(note => note._id === elementId)) && (
+          <ContextMenu
+            left={points.x}
+            top={points.y}
+            options={options.slice(1,options.length)}
+            onClose={closeContextMenu}
+          />
+          )
+        }
         {notes.map((note) => (
           <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
             <Note 
@@ -280,10 +298,13 @@ function NotePage() {
               noteId={note._id} 
               onDelete={deleteNote}
               editingNote={note._id === elementId && editingNote ? true : false}
+              onUpdateNoteName={updateNote}
+              editingTask={editingTask}
+              editingDate={editingDate}
               deletingTask={deletingTask}
               editingCategory={editingCategory}
-              onUpdateNoteName={updateNote}
-              endEditing={() => {setEditingNote(false); setEditingCategory(false)}}
+              endEditing={endEditing}
+              points={points}
             />
           </div>
         ))}

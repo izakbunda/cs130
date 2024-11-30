@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const DateTimePicker = ({ onDateTimeChange, defaultDate, defaultTime, title }) => {
+function DateTimePicker({ top, left, defaultDate, defaultTime, title, onPress, actionOnInvalid }) {
     const providedDate = defaultDate ? defaultDate : '';
     const providedTime = defaultTime ? defaultTime : '';
 
@@ -9,37 +9,46 @@ export const DateTimePicker = ({ onDateTimeChange, defaultDate, defaultTime, tit
     
     const handleDateChange = (e) => {
         setDate(e.target.value);
-        handleChange(e.target.value, time);
     };
 
     const handleTimeChange = (e) => {
         setTime(e.target.value);
-        handleChange(date, e.target.value);
     };
 
-    // Call the parent function with the updated date and time
-    const handleChange = (selectedDate, selectedTime) => {
-        if (onDateTimeChange) {
-        onDateTimeChange(`${selectedDate}T${selectedTime}:00`);
+    const handleSubmit = () => {
+        if(date && time) {
+            onPress(date+"T"+time+":00")
+        } else if (date) {
+            console.log("no time")
+            alert("No time was set")
+            actionOnInvalid()
+        } else {
+            console.log("no date")
+            alert("No date was set")
+            actionOnInvalid()
         }
-    };
+    }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
-        <label >{title}</label>
-        <input
-            type="date"
-            value={date}
-            onChange={handleDateChange}
-            style={{ marginBottom: '10px', padding: '5px' }}
-        />
-        
-        <input
-            type="time"
-            value={time}
-            onChange={handleTimeChange}
-            style={{ padding: '5px' }}
-        />
+        <div className='due-date-menu' style={{ top: top, left: left }}>
+            <label >New Date</label>
+            <div className='due-date-input-wrapper'>
+                <input
+                    type="date"
+                    value={date}
+                    onChange={handleDateChange}
+                    className='date-input-box'
+                />
+                <input
+                    type="time"
+                    value={time}
+                    onChange={handleTimeChange}
+                    className='date-input-box'
+                />
+            </div>
+            <button className='date-submit-button'onClick={handleSubmit}>Set Date</button>
         </div>
     );
-};
+}
+
+export default DateTimePicker;

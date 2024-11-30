@@ -8,13 +8,17 @@ import '../css/folder-grid.css'
 import add_icon from '../assets/add_icon.svg'
 import trash_icon from '../assets/trash_icon.svg'
 
-function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCategory, onUpdateNoteName, endEditing }) {
-  console.log(id)
+import DateTimePicker from '../components/dateTime'
+import '../css/dateTime.css'
+
+function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDate, deletingTask, editingCategory, onUpdateNoteName, endEditing, points }) {
+  //console.log("note:", id)
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [clickedOnce, setClickedOnce] = useState(false)
   const [noteName, setNoteName] = useState(name)
+
   const buttonRef = useRef(null)
 
   const handleClick = () => {
@@ -143,7 +147,7 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
 
   useEffect(() => {
     fetchTasks()
-  }, [deletingTask, editingCategory])
+  }, [deletingTask, editingCategory]) // TODO: may have to add stuff here?
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -200,8 +204,14 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
             startDate={task.creationDate}
             dueDate={task.dueDate}
             category={task.category}
+            editingTask={editingTask && (task._id === id) ? true : false}
+            onEditTask={updateTaskName}
+            editingDate={editingDate && (task._id === id) ? true : false}
+            onEditDate={updateTaskDueDate}
             editingCategory={editingCategory && (task._id === id) ? true : false}
             onEditCategory={updateTaskCategory}
+            endEditing={endEditing}
+            points={points}
           />
         )
       })}
@@ -212,7 +222,7 @@ function Note({ id, name, noteId, onDelete, editingNote, deletingTask, editingCa
           className="task-input"
           onChange={(e) => setTaskInput(e.target.value)}
           onKeyDown={handleTaskEnter}
-          autofocus
+          autoFocus
         />
       )}
     </div>

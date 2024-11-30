@@ -75,6 +75,7 @@
 .category-list {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 7px; 
 }
 
@@ -88,6 +89,18 @@
     padding-right: 8px;
     border-radius: 10px;
     align-items: center;
+    height: 20px;
+}
+
+.task-input {
+    border: none;
+    background: transparent;
+    font-family: var(--main-font);
+    font-size: .8rem;
+    font-weight: 400;
+    margin-left: 0em;
+    padding: 0px;
+    padding-left: 0px;
 }
 
 .easy {

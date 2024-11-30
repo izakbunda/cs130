@@ -2,9 +2,38 @@ import React, { useState } from 'react';
 import {TaskProgressBar} from './taskProgressBar';
 import "../css/task.css";
 
-export const Task = ({ taskText, id, startDate, dueDate, category, editingCategory, onEditCategory }) => {
-    console.log(id)
+import DateTimePicker from '../components/dateTime'
+import '../css/dateTime.css'
+
+export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, onEditTask, editingDate, onEditDate, editingCategory, onEditCategory, endEditing, points }) => {
+    //console.log("Task: ", taskText, id);
+    //console.log("date: ", editingDate);
+
     const [checked, setChecked] = useState(false);
+    const [taskName, setTaskName] = useState(taskText);
+
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            console.log("enter")
+            onEditTask(id, taskName);
+            endEditing();
+        }
+    }
+
+    const handleDateEnter = (enteredDate) => {
+        console.log("running handleDateEnter")
+        endEditing();
+        if (enteredDate == "T:00") {
+            alert("no date entered.")
+            console.log("no date")
+        } else if (enteredDate < startDate) {
+            alert("Cannot set due date in the past.")
+            console.log("bad date");
+        } else {
+            console.log("good date")
+            onEditDate(id, enteredDate);
+        }
+    }
 
     const catToColor = {
         "easy": "5px solid green",
@@ -25,22 +54,46 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingCatego
                 /> 
             </div>
             <div className='task-name-container' id={id}>
-                <p className={`${checked ? "task-text-completed" : "task-text"}`} id={id}>{taskText}</p>
+                {editingTask ? (
+                    <input
+                        type="text"
+                        value={taskName} 
+                        onChange={(e) => setTaskName(e.target.value)} 
+                        onKeyDown={handleEnter}
+                        autoFocus
+                        className="task-input" 
+                  />
+                ) : (
+                    <p className={`${checked ? "task-text-completed" : "task-text"}`} id={id}>{taskText}</p>
+                )}
+                
                 {dueDate && (
-                    <TaskProgressBar startDate={startDate} endDate={dueDate} id={id}/>
+                    <TaskProgressBar 
+                        tartDate={startDate} 
+                        endDate={dueDate} 
+                        id={id}/>
                 )}
             </div>
-            {!editingCategory && (
+            {editingCategory ? (
+                <div className='category-list'>
+                    <div className='category-button easy' onClick={() => {onEditCategory(id, "easy")}}>easy</div>
+                    <div className='category-button medium' onClick={() => {onEditCategory(id, "medium")}}>medium</div>
+                    <div className='category-button hard' onClick={() => {onEditCategory(id, "hard")}}>hard</div>
+                </div>
+            ) : (
                 <div style={{alignItem: 'center'}}> 
                     <div className='category-indicator' style={{ border: catToColor[category] }}></div>
                 </div>
             )}
-            {editingCategory && (
-                <div className='category-list'>
-                    <div className='category-button easy' onClick={() => {onEditCategory(id, "easy")}}>easy</div>
-                    <div className='category-button medium' onClick={() => {onEditCategory(id, "medium")}}>medium</div>
-                    <div className='category-button hard'onClick={() => {onEditCategory(id, "hard")}}>hard</div>
-                </div>
+            {editingDate && (
+                <DateTimePicker
+                    left={points.x}
+                    top={points.y}
+                    defaultDate={dueDate ? (dueDate.slice(0,10)) : ''}
+                    defaultTime={dueDate ? (dueDate.slice(11,19)) : ''}
+                    onPress={handleDateEnter}
+                    actionOnInvalid={endEditing}
+                />
             )}
         </div>
     )
