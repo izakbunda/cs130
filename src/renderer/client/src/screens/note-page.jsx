@@ -26,6 +26,10 @@ function NotePage() {
   const [clicked, setClicked] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
 
+  const [taskUpdate, setTaskUpdate] = useState(false)
+  const [currentTask, setCurrentTask] = useState('')
+  const [changeInPoints, setChangeInPoints] = useState(0)
+
   // need to handle the actions for each option
   const options = [
     {
@@ -46,11 +50,44 @@ function NotePage() {
     }
   ]
 
-  const [samplePet] = useState({
-    name: 'Sharkie',
-    level: 13,
-    exp: 600
+  const [pet, setPet] = useState({
+    name: 'placeholder',
+    level: 0, // Example starting level
+    points: 0 // Example starting EXP
   })
+
+  // FETCH PET FROM BACKEND -- TRIGGER AT PAGE LOAD + ANYTIME A TASK IS CHECKED OFF
+  useEffect(() => {
+    console.log('updating the stupid progress bar because of taskupdate: ', taskUpdate)
+    const fetchPet = async (petId) => {
+      try {
+        const response = await fetch(`http://localhost:3001/pets/${petId}`)
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`)
+        }
+        const petData = await response.json()
+        console.log('Fetched pet from backend:', petData)
+        // Save pet to localStorage for future use
+        localStorage.setItem('pet', JSON.stringify(petData))
+        // Update state
+        setPet(petData)
+      } catch (error) {
+        console.error('Failed to fetch pet:', error)
+      }
+    }
+
+    const pet = localStorage.getItem('pet')
+    console.log('Fetching pet from backend: ', pet)
+
+    // if (!pet) {
+    const pet_id = localStorage.getItem('pet_id')
+    // Fetch pet from backend if not in localStorage
+    fetchPet(pet_id)
+    // } else {
+    //   console.log('Pet found in localStorage:', JSON.parse(pet))
+    //   setPet(JSON.parse(pet))
+    // }
+  }, [navigate, taskUpdate])
 
   const layoutFolder = [
     { i: 'pet', x: 0, y: 0, w: 4, h: 2, static: true },
@@ -185,16 +222,79 @@ function NotePage() {
     }
   }, [])
 
+  const onCheckboxChange = (checked, id) => {
+    // console.log('In note-page: checkbox state from child:', checked)
+    setCurrentTask(id)
+    setTaskUpdate(!taskUpdate)
+
+    const updateTask = async () => {
+      let changeInPoints = 0
+      try {
+        const resp = await fetch(`http://localhost:3001/tasks/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: checked ? 'completed' : 'pending' }) // Use `checked`
+        })
+
+        const task = await resp.json()
+
+        // positive or negative points based on checked status
+        changeInPoints = checked === true ? task.points : -task.points
+
+        // Update pet points using the calculated change
+        await updatePet(changeInPoints)
+      } catch (error) {
+        console.error('Failed to update task:', error)
+      }
+    }
+
+    updateTask()
+
+    // STEP 2: UPDATE PET -> pet.points and/or pet.level
+    const updatePet = async (pointsToAdd) => {
+      try {
+        // FIRST GET THE PET
+        const pet_id = localStorage.getItem('pet_id')
+        const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {})
+
+        if (!fetchPetResp.ok) {
+          throw new Error(`Error fetching pet: ${fetchPetResp.status} ${fetchPetResp.statusText}`)
+        }
+
+        const petData = await fetchPetResp.json()
+        const currentPoints = petData.points
+
+        const updatedPoints = currentPoints + pointsToAdd
+
+        setPet((prevPet) => ({
+          ...prevPet,
+          points: updatedPoints
+        }))
+        console.log(updatedPoints)
+
+        const resp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ points: updatedPoints })
+        })
+
+        if (!resp.ok) {
+          throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+        } else {
+          // console.log('yay update the pet status after task completion')
+        }
+      } catch (error) {
+        // alert('Failed to update pet, please try again.')
+        console.error('Faild to update pet:', error)
+      }
+    }
+  }
+
   return (
     <div className="folder-page-container">
       <GridLayout {...gridProps}>
         <div key="pet" className="grid-item">
-          <PetIcon
-            name={samplePet.name}
-            level={samplePet.level}
-            exp={samplePet.exp}
-            page="Folder"
-          />
+          <PetIcon name={pet.name} level={pet.level} exp={pet.points} page="Folder" />
         </div>
         <div key="title" className="grid-item">
           <h2>TODOGOTCHI</h2>
@@ -224,7 +324,7 @@ function NotePage() {
           </div>
         </div>
         <div key="progress" className="grid-item">
-          <ProgressBar currentExp={samplePet.exp} level={samplePet.level} page="Folder" />
+          <ProgressBar currentExp={pet.points} level={pet.level} page="Folder" />
         </div>
       </GridLayout>
       <Folder name={folder.name} onClick={() => navigate('/folder')} className="note-page-folder" />
@@ -239,7 +339,13 @@ function NotePage() {
         )}
         {notes.map((note) => (
           <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
-            <Note key={note._id} name={note.name} noteId={note._id} onClick={deleteNote} />
+            <Note
+              key={note._id}
+              name={note.name}
+              noteId={note._id}
+              onClick={deleteNote}
+              onCheckboxChange={onCheckboxChange}
+            />
           </div>
         ))}
         {creatingNote && (
