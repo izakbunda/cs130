@@ -10,6 +10,8 @@ import MotivationalMessage from '../components/motivation'
 import BackButton from '../components/backButton'
 
 import todo from '../assets/todo.svg'
+import logout_icon from '../assets/logout_icon.svg'
+import '../css/landing.css'
 
 function Landing() {
   const [pet, setPet] = useState({
@@ -68,7 +70,7 @@ function Landing() {
 
   return (
     <div className="total-margin">
-      <button onClick={() => logout()} />
+      
       <BackButton navigateTo={'/login'} />
       <BackButton navigateTo={'/'} />
       <h1>Todogotchi</h1>
@@ -76,11 +78,19 @@ function Landing() {
         <InfoGrid />
         <ProgressBar currentExp={pet.points} level={pet.level} page="Landing" />
         <PetIcon name={pet.name} level={pet.level} exp={pet.exp} page="Landing" />
-        <Button
-          text="To-Do List"
-          onClick={handleNavigateToFolder}
-          icon={<img src={todo} alt="icon" style={{ width: '20px', height: '20px' }} />}
-        />
+        <div className="button-row">
+          <Button
+            text="Logout"
+            onClick={() => logout()}
+            icon={<img src={logout_icon} alt="logout" style={{ width: '20px', height: '20px' }} />}
+          />
+          <Button
+            text="To-Do List"
+            onClick={handleNavigateToFolder}
+            icon={<img src={todo} alt="icon" style={{ width: '20px', height: '20px' }} />}
+          />
+        </div>
+
         <MotivationalMessage />
       </div>
     </div>
