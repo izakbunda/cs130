@@ -66,7 +66,7 @@ function FolderPage() {
     return userId
   }
 
-  // FETCH PET FROM BACKEND
+  // FETCH PET FROM BACKEND (note: on this page, we do not need to update the pet)
   useEffect(() => {
     const fetchPet = async (petId) => {
       try {
@@ -98,7 +98,6 @@ function FolderPage() {
     }
   }, [navigate])
 
-  // FETCH FOLDERS FROM BACKEND
   const fetchFolders = async () => {
     try {
       const userId = getUserId()
@@ -119,7 +118,6 @@ function FolderPage() {
     }
   }
 
-  // CREATE FOLDER
   const createFolder = async () => {
     if (!folderInput.trim()) {
       alert('Folder name cannot be empty.')
@@ -149,7 +147,6 @@ function FolderPage() {
     }
   }
 
-  // DELETE FOLDER
   const deleteFolder = async (folderId) => {
     try {
       const resp = await fetch(`http://localhost:3001/folders/${folderId}`, {
@@ -168,7 +165,6 @@ function FolderPage() {
     }
   }
 
-  // UPDATE FOLDER
   const updateFolder = async (folderId, folderName) => {
     if (!folderName.trim()) {
       alert('Folder name cannot be empty.')
