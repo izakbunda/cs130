@@ -66,7 +66,7 @@ function NotePage() {
           throw new Error(`Error: ${response.status} ${response.statusText}`)
         }
         const petData = await response.json()
-        console.log('Fetched pet from backend:', petData)
+        // console.log('Fetched pet from backend:', petData)
         // Save pet to localStorage for future use
         localStorage.setItem('pet', JSON.stringify(petData))
         // Update state
@@ -77,7 +77,7 @@ function NotePage() {
     }
 
     const pet = localStorage.getItem('pet')
-    console.log('Fetching pet from backend: ', pet)
+    // console.log('Fetching pet from backend: ', pet)
 
     // if (!pet) {
     const pet_id = localStorage.getItem('pet_id')
@@ -250,7 +250,7 @@ function NotePage() {
 
     updateTask()
 
-    // STEP 2: UPDATE PET -> pet.points and/or pet.level
+    // STEP 2: UPDATE PET -> pet.points
     const updatePet = async (pointsToAdd) => {
       try {
         // FIRST GET THE PET
@@ -266,17 +266,17 @@ function NotePage() {
 
         const updatedPoints = currentPoints + pointsToAdd
 
+        const resp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ points: pointsToAdd })
+        })
+
         setPet((prevPet) => ({
           ...prevPet,
           points: updatedPoints
         }))
         console.log(updatedPoints)
-
-        const resp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ points: updatedPoints })
-        })
 
         if (!resp.ok) {
           throw new Error(`Error: ${resp.status} ${resp.statusText}`)
