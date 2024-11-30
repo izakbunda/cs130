@@ -1,0 +1,70 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v4 # Actions will checkout the repo's codebase
+
+      - name: Use Node.js ${{ matrix.node-version }} # dynamically inserts the current Node.js version being used from the matrix configuration
+        uses: actions/setup-node@v4 # sets up node environment
+        with:
+          node-version: ${{ matrix.node-version }} # this is from above
+          cache: 'npm' # enables npm to cache for faster builds later
+
+          # https://github.com/actions/setup-node#caching-global-packages-data:
+
+          cache-dependency-path: server/package-lock.json
+
+      # pattern for each:
+      # install - this installs all dependencies - installs what's in package-lock.json without updating them
+      # build - --if-present (because we don't have a build script)
+      # run test - runs test script from package.json - ensures that code changes does not break current functionality
+
+      # TODO:
+      # make build and test scripts?
+
+      # Install dependencies for the server
+      - name: Install Server Dependencies
+        working-directory: ./server
+        run: npm ci
+
+      # Install dependencies for the client
+      - name: Install Client Dependencies
+        working-directory: ./src/renderer/client
+        run: npm ci
+
+      # Build the server (if applicable)
+      - name: Build Server
+        working-directory: ./server
+        run: npm run build --if-present
+
+      # Build the client
+      - name: Build Client
+        working-directory: ./src/renderer/client
+        run: npm run build --if-present
+
+      # Run tests for the server
+      - name: Test Server
+        working-directory: ./server
+        run: npm test --if-present
+
+      # Run tests for the client
+      - name: Test Client
+        working-directory: ./src/renderer/client
+        run: npm test --if-present
