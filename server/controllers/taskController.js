@@ -3,9 +3,9 @@ import Note from '../models/Note.js'
 
 // points mapping -- refactor/change later
 let pointsMapping = {
-  easy: 10,
-  medium: 20,
-  hard: 30
+  easy: 100,
+  medium: 500,
+  hard: 1000
 }
 
 // desc: create a new task
