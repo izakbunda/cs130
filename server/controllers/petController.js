@@ -72,34 +72,6 @@ export const getPet = async (req, res) => {
 // desc: update pet
 // route: PATCH /pets/:petId
 // access: private (TODO)
-// export const updatePet = async (req, res) => {
-//   try {
-//     const { petId } = req.params;
-//     const petData = req.body;
-
-//     // confirm required data
-//     if (!petId) {
-//       return res.status(400).json({ message: "Pet ID required" });
-//     }
-
-//     // do we wanna do level calculation here??
-
-//     // find pet and update it
-//     const pet = await Pet.findByIdAndUpdate(petId, petData, {
-//       new: true,
-//     }).exec();
-
-//     if (!pet) {
-//       return res.status(404).json({ message: "Pet not found" });
-//     }
-
-//     // send back updated pet
-//     res.status(200).json(pet);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
 export const updatePet = async (req, res) => {
   try {
     const { petId } = req.params

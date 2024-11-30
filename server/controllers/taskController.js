@@ -3,7 +3,7 @@ import Note from '../models/Note.js'
 
 // points mapping -- refactor/change later
 let pointsMapping = {
-  easy: 100,
+  easy: 250,
   medium: 500,
   hard: 1000
 }

@@ -58,7 +58,7 @@ function NotePage() {
 
   // FETCH PET FROM BACKEND -- TRIGGER AT PAGE LOAD + ANYTIME A TASK IS CHECKED OFF
   useEffect(() => {
-    console.log('updating the stupid progress bar because of taskupdate: ', taskUpdate)
+    console.log('updating the stupid progress bar because of taskupdate: ', taskUpdate, currentTask)
     const fetchPet = async (petId) => {
       try {
         const response = await fetch(`http://localhost:3001/pets/${petId}`)
@@ -255,31 +255,40 @@ function NotePage() {
       try {
         // FIRST GET THE PET
         const pet_id = localStorage.getItem('pet_id')
-        const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {})
 
-        if (!fetchPetResp.ok) {
-          throw new Error(`Error fetching pet: ${fetchPetResp.status} ${fetchPetResp.statusText}`)
-        }
-
-        const petData = await fetchPetResp.json()
-        const currentPoints = petData.points
-
-        const updatedPoints = currentPoints + pointsToAdd
-
-        const resp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
+        // UPDATE POINTS ON BACKEND
+        const updateResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ points: pointsToAdd })
         })
 
+        if (!updateResp.ok) {
+          throw new Error(`Error updating pet: ${updateResp.status} ${updateResp.statusText}`)
+        }
+
+        // NOW WE WANT TO UPDATE THE PET IN ORDER TO RE-RENDER THE PROGRESS BAR
+
+        // GET THE UPDATED PET WITH THE UPDATED CALCULATIONS OF POINTS AND LEVEL
+        const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`)
+
+        if (!fetchPetResp.ok) {
+          throw new Error(
+            `Error fetching updated pet: ${fetchPetResp.status} ${fetchPetResp.statusText}`
+          )
+        }
+
+        const updatedPetData = await fetchPetResp.json()
+
+        // UPDATE PET STATE WITH UPDATED POINTS AND LEVEL -> THIS WILL TRIGGER RE-RENDER OF PROGRESS BAR
         setPet((prevPet) => ({
           ...prevPet,
-          points: updatedPoints
+          points: updatedPetData.points,
+          level: updatedPetData.level
         }))
-        console.log(updatedPoints)
 
-        if (!resp.ok) {
-          throw new Error(`Error: ${resp.status} ${resp.statusText}`)
+        if (!updateResp.ok) {
+          throw new Error(`Error: ${updateResp.status} ${updateResp.statusText}`)
         } else {
           // console.log('yay update the pet status after task completion')
         }
