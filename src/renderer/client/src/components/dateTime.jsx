@@ -43,7 +43,7 @@ function DateTimePicker({ top, left, defaultDate, defaultTime, title, onPress, a
                     type="time"
                     value={time}
                     onChange={handleTimeChange}
-                    className='date-input-box'
+                    className='time-input-box'
                 />
             </div>
             <button className='date-submit-button'onClick={handleSubmit}>Set Date</button>

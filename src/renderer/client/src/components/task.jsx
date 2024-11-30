@@ -11,6 +11,7 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, 
 
     const [checked, setChecked] = useState(false);
     const [taskName, setTaskName] = useState(taskText);
+    const [dueDateCopy, setDueDateCopy] = useState(dueDate); //fixes issue of progress bar not loading when initially set
 
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
@@ -31,7 +32,8 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, 
             console.log("bad date");
         } else {
             console.log("good date")
-            onEditDate(id, enteredDate);
+            onEditDate(id, enteredDate); //this does not update the progress bar
+            setDueDateCopy(enteredDate); //without this, the progress bar will not show up
         }
     }
 
@@ -61,16 +63,16 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, 
                         onChange={(e) => setTaskName(e.target.value)} 
                         onKeyDown={handleEnter}
                         autoFocus
-                        className="task-input" 
+                        className="task-input-edit" 
                   />
                 ) : (
                     <p className={`${checked ? "task-text-completed" : "task-text"}`} id={id}>{taskText}</p>
                 )}
                 
-                {dueDate && (
+                {dueDateCopy && (
                     <TaskProgressBar 
                         tartDate={startDate} 
-                        endDate={dueDate} 
+                        endDate={dueDateCopy} 
                         id={id}/>
                 )}
             </div>
@@ -89,8 +91,8 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, 
                 <DateTimePicker
                     left={points.x}
                     top={points.y}
-                    defaultDate={dueDate ? (dueDate.slice(0,10)) : ''}
-                    defaultTime={dueDate ? (dueDate.slice(11,19)) : ''}
+                    defaultDate={dueDateCopy ? (dueDateCopy.slice(0,10)) : ''}
+                    defaultTime={dueDateCopy ? (dueDateCopy.slice(11,19)) : ''}
                     onPress={handleDateEnter}
                     actionOnInvalid={endEditing}
                 />

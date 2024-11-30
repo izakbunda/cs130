@@ -18,6 +18,13 @@
 
 .date-input-box {
     display: flex;
+    width: 120px;
+}
+
+.time-input-box {
+    display: flex;
+    width: 95px;
+    margin-left: 10px;
 }
 
 .date-submit-button {

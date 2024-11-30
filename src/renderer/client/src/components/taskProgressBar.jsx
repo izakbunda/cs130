@@ -36,9 +36,19 @@ export const TaskProgressBar = ({ startDate, endDate }) => {
       return;
     }
 
+
+    if (!milliseconds) {
+      console.log("NaN time")
+      console.log("start: ", startDate);
+      console.log("due: ", endDate);
+    }
+
     const minutes = Math.floor(milliseconds / 60000);
+    //console.log("minutes: ", minutes)
     const hours = Math.floor(minutes / 60);
+    //console.log("hours: ", hours)
     const days = Math.floor(hours / 24);
+    //console.log("days: ", days)
 
     if (days > 0) {
       setTimeRemaining(`Due in ${days} days`);

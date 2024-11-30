@@ -92,11 +92,11 @@
     height: 20px;
 }
 
-.task-input {
+.task-input-edit {
     border: none;
     background: transparent;
     font-family: var(--main-font);
-    font-size: .8rem;
+    font-size: .9rem;
     font-weight: 400;
     margin-left: 0em;
     padding: 0px;
