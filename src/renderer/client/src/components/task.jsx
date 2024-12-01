@@ -66,7 +66,7 @@ export const Task = ({ taskText, id, startDate, dueDate, category, editingTask, 
                         className="task-input-edit" 
                   />
                 ) : (
-                    <p className={`${checked ? "task-text-completed" : "task-text"}`} id={id}>{taskText}</p>
+                    <p className={`${checked ? "task-text-completed" : "task-text"}`} id={id}>{taskName}</p>
                 )}
                 
                 {dueDateCopy && (
