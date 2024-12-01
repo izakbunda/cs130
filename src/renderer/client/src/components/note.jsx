@@ -11,7 +11,7 @@ import trash_icon from '../assets/trash_icon.svg'
 import DateTimePicker from '../components/dateTime'
 import '../css/dateTime.css'
 
-function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDate, deletingTask, editingCategory, onUpdateNoteName, endEditing, points }) {
+function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDate, deletingTask, editingCategory, onUpdateNoteName, endEditing, points, onClick, onCheckboxChange }) {
   //console.log("note:", id)
   const [tasks, setTasks] = useState([])
   const [creatingTask, setCreatingTask] = useState(false)
@@ -20,6 +20,14 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
   const [noteName, setNoteName] = useState(name)
 
   const buttonRef = useRef(null)
+
+  const [isChecked, setIsChecked] = useState(false)
+
+  const handleCheckedBox = (checked, id) => {
+    // console.log('In note: checkbox state from child:', checked)
+    setIsChecked(checked)
+    onCheckboxChange(checked, id)
+  }
 
   const handleClick = () => {
     if (!clickedOnce) {
@@ -200,6 +208,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
           <Task
             key={task._id}
             id={task._id}
+            status={task.status}
             taskText={task.name}
             startDate={task.creationDate}
             dueDate={task.dueDate}
@@ -212,6 +221,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
             onEditCategory={updateTaskCategory}
             endEditing={endEditing}
             points={points}
+            onCheckboxChange={handleCheckedBox}
           />
         )
       })}

@@ -58,7 +58,14 @@
 .notes-list {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    margin: 10px 0;
+    padding-right: 15px;
+    margin-right: -15px;
+
 }
 
 .folder-input {
