@@ -25,13 +25,17 @@ export const Task = ({ taskText, id, status, startDate, dueDate, category, editi
 
     const handleDateEnter = (enteredDate) => {
         console.log("running handleDateEnter")
+        let localStart = new Date(startDate); //startDate is in UTC time zone
         endEditing();
         if (enteredDate == "T:00") {
             alert("no date entered.")
             console.log("no date")
-        } else if (enteredDate < startDate) {
+        } else if (enteredDate < localStart) {
             alert("Cannot set due date in the past.")
             console.log("bad date");
+            console.log("start: ", startDate);
+            console.log("local start: ", localStart);
+            console.log("entered: ", enteredDate);
         } else {
             console.log("good date")
             onEditDate(id, enteredDate); //this does not update the progress bar
@@ -84,9 +88,10 @@ export const Task = ({ taskText, id, status, startDate, dueDate, category, editi
                 )}
                 {dueDateCopy && (
                     <TaskProgressBar 
-                        tartDate={startDate} 
+                        startDate={startDate} 
                         endDate={dueDateCopy} 
-                        id={id}/>
+                        id={id}
+                    />
                 )}
             </div>
             {editingCategory ? (

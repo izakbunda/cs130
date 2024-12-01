@@ -26,7 +26,9 @@ export const TaskProgressBar = ({ startDate, endDate }) => {
     */
     setProgress(progressPercentage);
     calculateTimeRemaining(end - now);
-
+    //console.log("start: ", String(new Date(start)));
+    //console.log("end: ", String(new Date(end)));
+    //console.log("now", String(new Date(now)));
   };
 
   // Calculate the time remaining
