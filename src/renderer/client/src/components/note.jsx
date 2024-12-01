@@ -21,8 +21,6 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     const [taskInput, setTaskInput] = useState('');
     const [clickedOnce, setClickedOnce] = useState(false);
     const [noteName, setNoteName] = useState(name);
-
-    // currently unused (may readd)
     const [isChecked, setIsChecked] = useState(false);
 
     // button ref

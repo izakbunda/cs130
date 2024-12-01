@@ -1,67 +1,77 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { TaskProgressBar } from './taskProgressBar'
-import '../css/task.css'
+// import native react stuff
+import React, { useState, useEffect, useRef } from 'react';
 
+// import our components
+import TaskProgressBar from './taskProgressBar';
+import DateTimePicker from '../components/dateTime';
 
-import DateTimePicker from '../components/dateTime'
-import '../css/dateTime.css'
+// import styling sheets
+import '../css/task.css';
+import '../css/dateTime.css';
 
 export const Task = ({ taskText, id, status, startDate, dueDate, category, editingTask, onEditTask, editingDate, onEditDate, editingCategory, onEditCategory, endEditing, points, onCheckboxChange }) => {
     //console.log("Task: ", taskText, id);
     //console.log("date: ", editingDate);
 
+    // local states
     const [checked, setChecked] = useState(false);
     const [taskName, setTaskName] = useState(taskText);
     const [dueDateCopy, setDueDateCopy] = useState(dueDate); //fixes issue of progress bar not loading when initially set
-    const [changeInPoints, setChangeInPoints] = useState(0)
 
+    // currently unused but may readd later
+    const [changeInPoints, setChangeInPoints] = useState(0);
+
+    // when 'enter' is pressed, edit task name
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
-            console.log("enter")
             onEditTask(id, taskName);
             endEditing();
         }
     }
 
+    // when date change button is pushed, update the date
     const handleDateEnter = (enteredDate) => {
-        console.log("running handleDateEnter")
+        console.log("running handleDateEnter");
         let localStart = new Date(startDate); //startDate is in UTC time zone
         endEditing();
         if (enteredDate == "T:00") {
-            alert("no date entered.")
-            console.log("no date")
+            alert("no date entered.");
+            console.log("no date");
         } else if (enteredDate < localStart) {
-            alert("Cannot set due date in the past.")
+            alert("Cannot set due date in the past.");
             console.log("bad date");
             console.log("start: ", startDate);
             console.log("local start: ", localStart);
             console.log("entered: ", enteredDate);
         } else {
-            console.log("good date")
+            console.log("good date");
             onEditDate(id, enteredDate); //this does not update the progress bar
             setDueDateCopy(enteredDate); //without this, the progress bar will not show up
         }
-    }
+    };
 
+    // Trach initial render
+    const isFirstRender = useRef(true) ;
 
-  const isFirstRender = useRef(true) // Track initial render
+    // when the checkbox is clicked
+    const handleChange = (event) => {
+        const isChecked = event.target.checked;
+        setChecked(isChecked); // directly use event's value
+        onCheckboxChange(isChecked, id); // notify parent
+    };
 
-  useEffect(() => {
-    setChecked(status === 'pending' ? false : true)
-  }, [])
+    // conversion of category to css styling
+    const catToColor = {
+        easy: '5px solid green',
+        medium: '5px solid orange',
+        hard: '5px solid red'
+    };
+    
+    useEffect(() => {
+        setChecked(status === 'pending' ? false : true)
+    }, []);
 
-  const handleChange = (event) => {
-    const isChecked = event.target.checked
-    setChecked(isChecked) // directly use event's value
-    onCheckboxChange(isChecked, id) // notify parent
-  }
-
-  const catToColor = {
-    easy: '5px solid green',
-    medium: '5px solid orange',
-    hard: '5px solid red'
-  }
-  
+    // return Task UI
     return (
         <div className='task-container' id={id}>
             <div className='checkbox-container' id={id}>
