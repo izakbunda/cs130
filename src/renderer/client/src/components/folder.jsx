@@ -1,100 +1,89 @@
+// Import native stuff
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes, { bool } from 'prop-types'
-import '../css/folder.css'
-import '../css/index.css'
 import { useLocation } from 'react-router-dom';
-import folder_icon from '../assets/folder_icon.svg'
-import open_folder_icon from '../assets/open_folder.svg'
 
-function Folder({
-  name,
-  id,
-  notesNumber,
-  onClick,
-  onUpdateFolderName,
-  className,
-  editing,
-  endEditing
-}) {
-  const [clickedOnce, setClickedOnce] = useState(false)
-  const [folderName, setFolderName] = useState(name)
-  const folderRef = useRef(null)
-  const location = useLocation();
+// Import styling sheets
+import '../css/index.css';
+import '../css/folder.css';
 
-  const handleClick = () => {
-    if (!clickedOnce) {
-      setClickedOnce(true)
-    } else {
-      if (onClick && !editing) {
-        onClick()
-      }
-      console.log('Second click action!')
-    }
-  }
+// Import custom icons
+import folder_icon from '../assets/folder_icon.svg';
+import open_folder_icon from '../assets/open_folder.svg';
 
-  const handleEnter = (e) => {
-    if (e.key === 'Enter') {
-      onUpdateFolderName(id, folderName)
-      endEditing()
-    }
-  }
+function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className, editing, endEditing}) {
+    // Local States
+    const [clickedOnce, setClickedOnce] = useState(false);
+    const [folderName, setFolderName] = useState(name);
 
-  // const handleBlur = async () => {
-  //     setIsEditing(false);
-  //     if (folderName.trim() && folderName !== name) {
-  //         console.log("call parent handler");
-  //         await onUpdateFolderName(id, folderName); // Call parent handler
-  //     } else {
-  //         setFolderName(name); // Revert to original name if no change
-  //     }
-  // }
+    const folderRef = useRef(null);
+    const location = useLocation();
 
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (folderRef.current && !folderRef.current.contains(event.target)) {
-        setClickedOnce(false)
-      }
+    // folderIcon path
+    const folderIcon = location.pathname.includes('/note') ? open_folder_icon : folder_icon;
+
+    // Make sure all actions require a double click
+    const handleClick = () => {
+        if (!clickedOnce) {
+            setClickedOnce(true);
+        } else {
+            if (onClick && !editing) {
+                onClick();
+            }
+            console.log('Second click action!');
+        }
     }
 
-    document.addEventListener('click', handleOutsideClick)
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [])
-  const folderIcon = location.pathname.includes('/note') ? open_folder_icon : folder_icon;
+    // When 'enter' pressed, update the folder name
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            onUpdateFolderName(id, folderName);
+            endEditing();
+        }
+    };
 
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (folderRef.current && !folderRef.current.contains(event.target)) {
+                setClickedOnce(false);
+            }
+        };
 
-  return (
-    <div
-      ref={folderRef}
-      id={id}
-      className={['folder-container', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
-      onClick={handleClick}
-    >
-      <div className="left-half" id={id}>
-        <img src={folderIcon} className="folder-icon" id={id} />
-        {editing ? (
-          <input
-            type="text"
-            value={folderName}
-            onChange={(e) => setFolderName(e.target.value)}
-            onKeyDown={handleEnter}
-            autoFocus
-            className="folder-input"
-          />
-        ) : (
-          <h4 id={id}>{folderName}</h4>
-        )}
-      </div>
-      {className === 'folder-page-folder' && (
-        <div className="right-half" id={id}>
-          <p className="notes-number" id={id}>
-            {notesNumber}
-          </p>
+        document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick)
+        };
+    }, []);
+
+    return (
+        <div
+            ref={folderRef}
+            id={id}
+            className={['folder-container', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
+            onClick={handleClick}
+        >
+            <div className="left-half" id={id}>
+                <img src={folderIcon} className="folder-icon" id={id} />
+                {editing ? (
+                    <input
+                        type="text"
+                        value={folderName}
+                        onChange={(e) => setFolderName(e.target.value)}
+                        onKeyDown={handleEnter}
+                        autoFocus
+                        className="folder-input"
+                    />
+                ) : (
+                    <h4 id={id}>{folderName}</h4>
+                )}
+            </div>
+            {className === 'folder-page-folder' && (
+                <div className="right-half" id={id}>
+                    <p className="notes-number" id={id}>{notesNumber}</p>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  )
+    );
 }
 
-export default Folder
+export default Folder;
