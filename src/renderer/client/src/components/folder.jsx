@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes, { bool } from 'prop-types'
 import '../css/folder.css'
 import '../css/index.css'
-
+import { useLocation } from 'react-router-dom';
 import folder_icon from '../assets/folder_icon.svg'
+import open_folder_icon from '../assets/open_folder.svg'
 
 function Folder({
   name,
@@ -18,6 +19,7 @@ function Folder({
   const [clickedOnce, setClickedOnce] = useState(false)
   const [folderName, setFolderName] = useState(name)
   const folderRef = useRef(null)
+  const location = useLocation();
 
   const handleClick = () => {
     if (!clickedOnce) {
@@ -49,6 +51,8 @@ function Folder({
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [])
+  const folderIcon = location.pathname.includes('/note') ? open_folder_icon : folder_icon;
+
 
   return (
     <div
@@ -58,7 +62,7 @@ function Folder({
       onClick={handleClick}
     >
       <div className="left-half" id={id}>
-        <img src={folder_icon} className="folder-icon" id={id} />
+        <img src={folderIcon} className="folder-icon" id={id} />
         {editing ? (
           <input
             type="text"

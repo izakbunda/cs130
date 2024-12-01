@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Note from "../models/Note.js";
+import mongoose from 'mongoose'
+import Note from '../models/Note.js'
 
 /**
  * user is custom - view ./User.js
@@ -8,8 +8,8 @@ import Note from "../models/Note.js";
 const TaskSchema = new mongoose.Schema({
   note: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Note",
-    required: true,
+    ref: 'Note',
+    required: true
   },
 
   name: { type: String, required: true },
@@ -21,35 +21,39 @@ const TaskSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["pending", "completed", "overdue"],
-    default: "pending",
+    enum: ['pending', 'completed'],
+    default: 'pending'
   },
 
   category: {
     type: String,
-    enum: ["easy", "medium", "hard"],
-    required: true,
+    enum: ['easy', 'medium', 'hard'],
+    required: true
   },
 
   // make sure this is optional in controller
   completedDate: { type: Date },
 
   // mapping from category to points will be in controller
-  points: { type: Number, default: 0 },
-});
+  points: { type: Number, default: 10 }
+})
 
 // pre-delete hook - removes task ref from note's tasks arr
-TaskSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+TaskSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
   try {
     // remove task from note arr
-    const note = await Note.findByIdAndUpdate(this.note, { $pull: { tasks: this._id } }, {new: true});
+    const note = await Note.findByIdAndUpdate(
+      this.note,
+      { $pull: { tasks: this._id } },
+      { new: true }
+    )
 
-    next();
+    next()
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
-const Task = mongoose.model("Task", TaskSchema);
+const Task = mongoose.model('Task', TaskSchema)
 
-export default Task;
+export default Task

@@ -36,10 +36,10 @@ function FolderPage() {
     }
   ]
 
-  const [samplePet] = useState({
-    name: 'Sharkie',
-    level: 13,
-    exp: 600
+  const [pet, setPet] = useState({
+    name: 'placeholder',
+    level: 0, // Example starting level
+    points: 0 // Example starting EXP
   })
 
   const layoutFolder = [
@@ -65,6 +65,38 @@ function FolderPage() {
     }
     return userId
   }
+
+  // FETCH PET FROM BACKEND (note: on this page, we do not need to update the pet)
+  useEffect(() => {
+    const fetchPet = async (petId) => {
+      try {
+        const response = await fetch(`http://localhost:3001/pets/${petId}`)
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`)
+        }
+        const petData = await response.json()
+        console.log('Fetched pet from backend:', petData)
+        // Save pet to localStorage for future use
+        localStorage.setItem('pet', JSON.stringify(petData))
+        // Update state
+        setPet(petData)
+      } catch (error) {
+        console.error('Failed to fetch pet:', error)
+      }
+    }
+
+    const pet = localStorage.getItem('pet')
+    console.log('Fetching pet from backend: ', pet)
+
+    if (!pet) {
+      const pet_id = localStorage.getItem('pet_id')
+      // Fetch pet from backend if not in localStorage
+      fetchPet(pet_id)
+    } else {
+      console.log('Pet found in localStorage:', JSON.parse(pet))
+      setPet(JSON.parse(pet))
+    }
+  }, [navigate])
 
   const fetchFolders = async () => {
     try {
@@ -206,12 +238,7 @@ function FolderPage() {
     <div className="folder-page-container">
       <GridLayout {...gridProps}>
         <div key="pet" className="grid-item">
-          <PetIcon
-            name={samplePet.name}
-            level={samplePet.level}
-            exp={samplePet.exp}
-            page="Folder"
-          />
+          <PetIcon name={pet.name} level={pet.level} exp={pet.exp} page="Folder" />
         </div>
         <div key="title" className="grid-item">
           <h2>TODOGOTCHI</h2>
@@ -243,7 +270,7 @@ function FolderPage() {
           </div>
         </div>
         <div key="progress" className="grid-item">
-          <ProgressBar currentExp={samplePet.exp} level={samplePet.level} page="Folder" />
+          <ProgressBar currentExp={pet.points} level={pet.level} page="Folder" />
         </div>
       </GridLayout>
       <div className="folders-list">
