@@ -365,100 +365,98 @@ function NotePage() {
     // return page UI
     return (
         <div className="folder-page-container">
-        <GridLayout {...gridProps}>
-            <div key="pet" className="grid-item">
-            <PetIcon name={pet.name} level={pet.level} exp={pet.points} page="Folder" />
-            </div>
-            <div key="title" className="grid-item">
-            <h2>TODOGOTCHI</h2>
-            </div>
-            <div key="buttons" className="grid-item">
-            <div className="button-container">
-                <Button
-                icon={
-                    <img
-                    src={add_notes_icon}
-                    alt="Add Note Icon"
-                    style={{ width: '25px', height: '25px' }}
-                    />
-                }
-                onClick={() => setCreatingNote(true)}
-                noOutline
-                className="folder-button large-icon"
-                />
-                <Button
-                icon={
-                    <img src={home_icon} alt="Home Icon" style={{ width: '25px', height: '25px' }} />
-                }
-                onClick={() => navigate('/landing')}
-                noOutline
-                className="folder-button large-icon"
-                />
-            </div>
-            </div>
-            <div key="progress" className="grid-item">
-            <ProgressBar currentExp={pet.points} level={pet.level} page="Folder" />
-            </div>
-        </GridLayout>
-        <Folder name={folder.name} onClick={() => navigate('/folder')} className="note-page-folder" />
-        <div className="notes-list">
-            {clicked && notes.some(note => note._id === elementId) && (
-            <ContextMenu
-                left={points.x}
-                top={points.y}
-                options={[options[0]]}
-                onClose={closeContextMenu}
-            />
-            )
-            }
-            {clicked && (!notes.some(note => note._id === elementId)) && (
-            <ContextMenu
-                left={points.x}
-                top={points.y}
-                options={options.slice(1, options.length)}
-                onClose={closeContextMenu}
-            />
-            )
-            }
-            {notes.map((note) => (
-            <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
-
-                <Note
-                key={note._id}
-                id={elementId}
-                name={note.name}
-                noteId={note._id}
-                onDelete={deleteNote}
-                editingNote={note._id === elementId && editingNote ? true : false}
-                onUpdateNoteName={updateNote}
-                editingTask={editingTask}
-                editingDate={editingDate}
-                deletingTask={deletingTask}
-                editingCategory={editingCategory}
-                endEditing={endEditing}
-                points={points}
-                onClick={deleteNote}
-                onCheckboxChange={onCheckboxChange}
-
-                />
-            </div>
-            ))}
-            {creatingNote && (
-            <div className="note-container">
-                <div className="left-half">
-                <img src={add_icon} className="add-icon" />
-                <input
-                    type="text"
-                    placeholder="add a new note"
-                    className="note-input"
-                    onChange={(e) => setNoteInput(e.target.value)}
-                    onKeyDown={handleEnter}
-                    autoFocus
-                />
+            <GridLayout {...gridProps}>
+                <div key="pet" className="grid-item">
+                    <PetIcon name={pet.name} level={pet.level} exp={pet.points} page="Folder" />
                 </div>
+                <div key="title" className="grid-item">
+                    <h2>TODOGOTCHI</h2>
+                </div>
+                <div key="buttons" className="grid-item">
+                    <div className="button-container">
+                        <Button
+                            icon={
+                                <img
+                                src={add_notes_icon}
+                                alt="Add Note Icon"
+                                style={{ width: '25px', height: '25px' }}
+                                />
+                            }
+                            onClick={() => setCreatingNote(true)}
+                            noOutline
+                            className="folder-button large-icon"
+                        />
+                        <Button
+                            icon={
+                                <img src={home_icon} alt="Home Icon" style={{ width: '25px', height: '25px' }} />
+                            }
+                            onClick={() => navigate('/landing')}
+                            noOutline
+                            className="folder-button large-icon"
+                        />
+                    </div>
+                </div>
+                <div key="progress" className="grid-item">
+                    <ProgressBar currentExp={pet.points} level={pet.level} page="Folder" />
+                </div>
+            </GridLayout>
+            <Folder name={folder.name} onClick={() => navigate('/folder')} className="note-page-folder" />
+            <div className="notes-list">
+                {clicked && notes.some(note => note._id === elementId) && (
+                    <ContextMenu
+                        left={points.x}
+                        top={points.y}
+                        options={[options[0]]}
+                        onClose={closeContextMenu}
+                    />
+                    )
+                }
+                {clicked && (!notes.some(note => note._id === elementId)) && (
+                    <ContextMenu
+                        left={points.x}
+                        top={points.y}
+                        options={options.slice(1, options.length)}
+                        onClose={closeContextMenu}
+                    />
+                    )
+                }
+                {notes.map((note) => (
+                    <div onContextMenu={(e) => handleRightClick(e, 'task')} key={note._id}>
+                        <Note
+                            key={note._id}
+                            id={elementId}
+                            name={note.name}
+                            noteId={note._id}
+                            onDelete={deleteNote}
+                            editingNote={note._id === elementId && editingNote ? true : false}
+                            onUpdateNoteName={updateNote}
+                            editingTask={editingTask}
+                            editingDate={editingDate}
+                            deletingTask={deletingTask}
+                            editingCategory={editingCategory}
+                            endEditing={endEditing}
+                            points={points}
+                            onClick={deleteNote}
+                            onCheckboxChange={onCheckboxChange}
+                        />
+                    </div>
+                ))}
+                {creatingNote && (
+                    <div className="note-container">
+                        <div className="left-half">
+                            <img src={add_icon} className="add-icon" />
+                            <input
+                                type="text"
+                                placeholder="add a new note"
+                                className="note-input"
+                                onChange={(e) => setNoteInput(e.target.value)}
+                                onKeyDown={handleEnter}
+                                autoFocus
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
-            )}
-        </div>
         </div>
     )
 };

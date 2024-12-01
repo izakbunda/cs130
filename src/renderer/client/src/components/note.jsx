@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 // Import our Components
-import Task  from './task';
+import { Task }  from './task';
 
 // Import styling sheets
 import '../css/task.css';
@@ -187,71 +187,70 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     // return Note UI
     return (
         <div className="note-container" id={noteId}>
-        <div className="header-container" id={noteId}>
-            <div className="left-half" id={noteId}>
-            <img
-                src={add_icon}
-                className="add-icon"
-                onClick={() => setCreatingTask(!creatingTask)}
-                id={noteId}
-            />
-            {editingNote ? (
+            <div className="header-container" id={noteId}>
+                <div className="left-half" id={noteId}>
+                    <img
+                        src={add_icon}
+                        className="add-icon"
+                        onClick={() => setCreatingTask(!creatingTask)}
+                        id={noteId}
+                    />
+                    {editingNote ? (
+                        <input
+                            type="text"
+                            value={noteName}
+                            onChange={(e) => setNoteName(e.target.value)}
+                            onKeyDown={handleNoteEnter}
+                            autoFocus
+                            className="note-input"
+                        />
+                    ):(
+                        <h4 id={noteId}>{noteName}</h4>
+                    )}
+                </div>
+                <div
+                    ref={buttonRef}
+                    className={['right-half', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
+                    onClick={handleClick}
+                    id={noteId}
+                >
+                    <img src={trash_icon} className="trash-icon" />
+                </div>
+            </div>
+            {tasks.map((task) => {
+                return (
+                    <Task
+                        key={task._id}
+                        id={task._id}
+                        status={task.status}
+                        taskText={task.name}
+                        startDate={task.creationDate}
+                        dueDate={task.dueDate}
+                        category={task.category}
+                        editingTask={editingTask && (task._id === id) ? true : false}
+                        onEditTask={updateTaskName}
+                        editingDate={editingDate && (task._id === id) ? true : false}
+                        onEditDate={updateTaskDueDate}
+                        editingCategory={editingCategory && (task._id === id) ? true : false}
+                        onEditCategory={updateTaskCategory}
+                        endEditing={endEditing}
+                        points={points}
+                        onCheckboxChange={handleCheckedBox}
+                    />
+                )
+            })}
+            {creatingTask && (
                 <input
                 type="text"
-                value={noteName}
-                onChange={(e) => setNoteName(e.target.value)}
-                onKeyDown={handleNoteEnter}
+                placeholder="add a new task!"
+                className="task-input"
+                onChange={(e) => setTaskInput(e.target.value)}
+                onKeyDown={handleTaskEnter}
                 autoFocus
-                className="note-input"
                 />
-            ):(
-                <h4 id={noteId}>{noteName}</h4>
             )}
-            
-            </div>
-            <div
-            ref={buttonRef}
-            className={['right-half', clickedOnce && 'clicked'].filter(Boolean).join(' ')}
-            onClick={handleClick}
-            id={noteId}
-            >
-            <img src={trash_icon} className="trash-icon" />
-            </div>
-        </div>
-        {tasks.map((task) => {
-            return (
-            <Task
-                key={task._id}
-                id={task._id}
-                status={task.status}
-                taskText={task.name}
-                startDate={task.creationDate}
-                dueDate={task.dueDate}
-                category={task.category}
-                editingTask={editingTask && (task._id === id) ? true : false}
-                onEditTask={updateTaskName}
-                editingDate={editingDate && (task._id === id) ? true : false}
-                onEditDate={updateTaskDueDate}
-                editingCategory={editingCategory && (task._id === id) ? true : false}
-                onEditCategory={updateTaskCategory}
-                endEditing={endEditing}
-                points={points}
-                onCheckboxChange={handleCheckedBox}
-            />
-            )
-        })}
-        {creatingTask && (
-            <input
-            type="text"
-            placeholder="add a new task!"
-            className="task-input"
-            onChange={(e) => setTaskInput(e.target.value)}
-            onKeyDown={handleTaskEnter}
-            autoFocus
-            />
-        )}
         </div>
     )
-    }
+}
 
-    export default Note;
+export default Note;

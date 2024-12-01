@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // import our components
-import TaskProgressBar from './taskProgressBar';
+import { TaskProgressBar } from './taskProgressBar';
 import DateTimePicker from '../components/dateTime';
 
 // import styling sheets

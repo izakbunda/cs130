@@ -16,11 +16,11 @@ function Folder({ name, id, notesNumber, onClick, onUpdateFolderName, className,
     const [clickedOnce, setClickedOnce] = useState(false);
     const [folderName, setFolderName] = useState(name);
 
-    // folderIcon path
-    const folderIcon = location.pathname.includes('/note') ? open_folder_icon : folder_icon;
-
     const folderRef = useRef(null);
     const location = useLocation();
+
+    // folderIcon path
+    const folderIcon = location.pathname.includes('/note') ? open_folder_icon : folder_icon;
 
     // Make sure all actions require a double click
     const handleClick = () => {
