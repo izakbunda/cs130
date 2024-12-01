@@ -48,27 +48,27 @@ function NotePage() {
     // need to handle the actions for each option of the right-click context menu
     const options = [
         {
-        label: 'Edit Note Name',
-        action: () => setEditingNote(true)
+            label: 'Edit Note Name',
+            action: () => setEditingNote(true)
         },
         {
-        label: 'Edit Task Name',
-        action: () => setEditingTask(true)
+            label: 'Edit Task Name',
+            action: () => setEditingTask(true)
         },
         {
-        label: 'Edit Due Date',
-        action: () => setEditingDate(true)
+            label: 'Edit Due Date',
+            action: () => setEditingDate(true)
         },
         {
-        label: 'Edit Category',
-        action: () => setEditingCategory(true)
+            label: 'Edit Category',
+            action: () => setEditingCategory(true)
         },
         {
-        label: 'Delete Task',
-        action: () => {
-            setDeletingTask(true);
-            deleteTask(elementId);
-        }
+            label: 'Delete Task',
+            action: () => {
+                setDeletingTask(true);
+                deleteTask(elementId);
+            }
         }
     ];
 
@@ -98,29 +98,29 @@ function NotePage() {
     useEffect(() => {
         console.log('updating the stupid progress bar because of taskupdate: ', taskUpdate, currentTask)
         const fetchPet = async (petId) => {
-        try {
-            const response = await fetch(`http://localhost:3001/pets/${petId}`)
-            if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`)
+            try {
+                const response = await fetch(`http://localhost:3001/pets/${petId}`);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const petData = await response.json();
+                // console.log('Fetched pet from backend:', petData)
+                // Save pet to localStorage for future use
+                localStorage.setItem('pet', JSON.stringify(petData));
+                // Update state
+                setPet(petData);
+            } catch (error) {
+                console.error('Failed to fetch pet:', error);
             }
-            const petData = await response.json()
-            // console.log('Fetched pet from backend:', petData)
-            // Save pet to localStorage for future use
-            localStorage.setItem('pet', JSON.stringify(petData))
-            // Update state
-            setPet(petData)
-        } catch (error) {
-            console.error('Failed to fetch pet:', error)
-        }
         }
 
-        const pet = localStorage.getItem('pet')
+        const pet = localStorage.getItem('pet');
         // console.log('Fetching pet from backend: ', pet)
 
         // if (!pet) {
-        const pet_id = localStorage.getItem('pet_id')
+        const pet_id = localStorage.getItem('pet_id');
         // Fetch pet from backend if not in localStorage
-        fetchPet(pet_id)
+        fetchPet(pet_id);
         // } else {
         //   console.log('Pet found in localStorage:', JSON.parse(pet))
         //   setPet(JSON.parse(pet))
@@ -130,109 +130,109 @@ function NotePage() {
     // GET all notes from server
     const fetchNotes = async () => {
         try {
-        const folderId = folder._id
-        const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
+            const folderId = folder._id;
+            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-        if (!resp.ok) {
-            throw new Error(`Error: ${resp.status} ${resp.statusText}`)
-        }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-        const data = await resp.json()
-        setNotes(data)
+            const data = await resp.json();
+            setNotes(data);
         } catch (error) {
-        alert('Failed to fetch notes, please try again.')
-        console.error('Error fetching notes:', error)
+            alert('Failed to fetch notes, please try again.');
+            console.error('Error fetching notes:', error);
         }
     };
 
     // POST a note to the server
     const createNote = async () => {
         if (!noteInput.trim()) {
-        alert('Note name cannot be empty.')
-        return
+            alert('Note name cannot be empty.');
+            return;
         }
 
         try {
-        const folderId = folder._id
-        const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: noteInput })
-        })
+            const folderId = folder._id;
+            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: noteInput })
+            });
 
-        if (!resp.ok) {
-            throw new Error(`Error: ${resp.status} ${resp.statusText}`)
-        }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-        const newNote = await resp.json()
-        console.log(newNote)
+            const newNote = await resp.json();
+            console.log(newNote);
 
-        // update notes
-        setNotes((prevNotes) => [...prevNotes, newNote])
+            // update notes
+            setNotes((prevNotes) => [...prevNotes, newNote]);
         } catch (error) {
-        alert('Failed to create note. Please try again.')
-        console.error('Error creating note:', error)
+            alert('Failed to create note. Please try again.');
+            console.error('Error creating note:', error);
         }
     };
 
     // DELETE specific note from server
     const deleteNote = async (noteId) => {
         try {
-        const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
-            method: 'DELETE'
-        })
+            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+                method: 'DELETE'
+            });
 
-        if (!resp.ok) {
-            throw new Error(`Error: ${resp.status} ${resp.statusText}`)
-        }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-        // remove note from local state
-        setNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId))
+            // remove note from local state
+            setNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
         } catch (error) {
-        alert('Failed to delete note, please try again.')
-        console.error('Failed to delete note:', error)
+            alert('Failed to delete note, please try again.');
+            console.error('Failed to delete note:', error);
         }
     };
 
     // UPDATE specific note on server
     const updateNote = async (noteId, noteName) => {
         try {
-        const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: noteName })
-        })
+            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: noteName })
+            });
 
-        if (!resp.ok) {
-            throw new Error(`Error: ${resp.status} ${resp.statusText}`)
-        }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
         } catch (error) {
-        alert('Failed to update note, please try again.')
-        console.error('Faild to update note:', error)
+            alert('Failed to update note, please try again.');
+            console.error('Faild to update note:', error);
         }
     };
 
     // DELETE specific task from server
     const deleteTask = async (taskId) => {
         try {
-        const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
-            method: 'DELETE'
-        });
+            const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
 
-        if (!resp.ok) {
-            throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-        }
+            if (!resp.ok) {
+                throw new Error(`Error: ${resp.status} ${resp.statusText}`);
+            }
 
-        // remove task from local state
-        // setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+            // remove task from local state
+            // setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
 
-        setDeletingTask(false);
+            setDeletingTask(false);
         } catch (error) {
-        alert('Failed to delete task, please try again later');
-        console.error('Error deleting task:', error);
+            alert('Failed to delete task, please try again later');
+            console.error('Error deleting task:', error);
         }
     };
 
@@ -247,12 +247,12 @@ function NotePage() {
 
     // when user right clicks on note, open up context menu
     const handleRightClick = (e) => {
-        endEditing()
-        e.preventDefault()
-        setPoints({ x: e.pageX, y: e.pageY })
-        setClicked(true)
+        endEditing();
+        e.preventDefault();
+        setPoints({ x: e.pageX, y: e.pageY });
+        setClicked(true);
         //console.log('right click: ', document.elementFromPoint(e.pageX, e.pageY).id)
-        setElementId(document.elementFromPoint(e.pageX, e.pageY).id)
+        setElementId(document.elementFromPoint(e.pageX, e.pageY).id);
     };
 
     // when user is done editing, reset all editing status
@@ -270,96 +270,96 @@ function NotePage() {
 
     // fetch the notes
     useEffect(() => {
-        fetchNotes()
+        fetchNotes();
     }, []);
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
-        setClicked(false)
-        }
+            setClicked(false)
+        };
 
-        document.addEventListener('click', handleOutsideClick)
+        document.addEventListener('click', handleOutsideClick);
         return () => {
-        document.removeEventListener('click', handleOutsideClick)
+            document.removeEventListener('click', handleOutsideClick);
         }
     }, []);
 
     // mark tasks as complete and update xp bar
     const onCheckboxChange = (checked, id) => {
         // console.log('In note-page: checkbox state from child:', checked)
-        setCurrentTask(id)
-        setTaskUpdate(!taskUpdate)
+        setCurrentTask(id);
+        setTaskUpdate(!taskUpdate);
 
         const updateTask = async () => {
-        let changeInPoints = 0
-        try {
-            const resp = await fetch(`http://localhost:3001/tasks/${id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: checked ? 'completed' : 'pending' }) // Use `checked`
-            })
+            let changeInPoints = 0;
+            try {
+                const resp = await fetch(`http://localhost:3001/tasks/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: checked ? 'completed' : 'pending' }) // Use `checked`
+                });
 
-            const task = await resp.json()
+                const task = await resp.json();
 
-            // positive or negative points based on checked status
-            changeInPoints = checked === true ? task.points : -task.points
+                // positive or negative points based on checked status
+                changeInPoints = checked === true ? task.points : -task.points
 
-            // Update pet points using the calculated change
-            await updatePet(changeInPoints)
-        } catch (error) {
-            console.error('Failed to update task:', error)
+                // Update pet points using the calculated change
+                await updatePet(changeInPoints);
+            } catch (error) {
+                console.error('Failed to update task:', error);
+            }
         }
-        }
 
-        updateTask()
+        updateTask();
 
         // STEP 2: UPDATE PET -> pet.points
         const updatePet = async (pointsToAdd) => {
-        try {
-            // FIRST GET THE PET
-            const pet_id = localStorage.getItem('pet_id')
+            try {
+                // FIRST GET THE PET
+                const pet_id = localStorage.getItem('pet_id');
 
-            // UPDATE POINTS ON BACKEND
-            const updateResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ points: pointsToAdd })
-            })
+                // UPDATE POINTS ON BACKEND
+                const updateResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ points: pointsToAdd })
+                });
 
-            if (!updateResp.ok) {
-            throw new Error(`Error updating pet: ${updateResp.status} ${updateResp.statusText}`)
+                if (!updateResp.ok) {
+                    throw new Error(`Error updating pet: ${updateResp.status} ${updateResp.statusText}`);
+                }
+
+                // NOW WE WANT TO UPDATE THE PET IN ORDER TO RE-RENDER THE PROGRESS BAR
+
+                // GET THE UPDATED PET WITH THE UPDATED CALCULATIONS OF POINTS AND LEVEL
+                const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`);
+
+                if (!fetchPetResp.ok) {
+                    throw new Error(
+                        `Error fetching updated pet: ${fetchPetResp.status} ${fetchPetResp.statusText}`
+                    );
+                }
+
+                const updatedPetData = await fetchPetResp.json();
+
+                // UPDATE PET STATE WITH UPDATED POINTS AND LEVEL -> THIS WILL TRIGGER RE-RENDER OF PROGRESS BAR
+                setPet((prevPet) => ({
+                    ...prevPet,
+                    points: updatedPetData.points,
+                    level: updatedPetData.level
+                }));
+
+                if (!updateResp.ok) {
+                    throw new Error(`Error: ${updateResp.status} ${updateResp.statusText}`);
+                } else {
+                    // console.log('yay update the pet status after task completion')
+                }
+            } catch (error) {
+                // alert('Failed to update pet, please try again.')
+                console.error('Faild to update pet:', error);
             }
-
-            // NOW WE WANT TO UPDATE THE PET IN ORDER TO RE-RENDER THE PROGRESS BAR
-
-            // GET THE UPDATED PET WITH THE UPDATED CALCULATIONS OF POINTS AND LEVEL
-            const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`)
-
-            if (!fetchPetResp.ok) {
-            throw new Error(
-                `Error fetching updated pet: ${fetchPetResp.status} ${fetchPetResp.statusText}`
-            )
-            }
-
-            const updatedPetData = await fetchPetResp.json()
-
-            // UPDATE PET STATE WITH UPDATED POINTS AND LEVEL -> THIS WILL TRIGGER RE-RENDER OF PROGRESS BAR
-            setPet((prevPet) => ({
-            ...prevPet,
-            points: updatedPetData.points,
-            level: updatedPetData.level
-            }))
-
-            if (!updateResp.ok) {
-            throw new Error(`Error: ${updateResp.status} ${updateResp.statusText}`)
-            } else {
-            // console.log('yay update the pet status after task completion')
-            }
-        } catch (error) {
-            // alert('Failed to update pet, please try again.')
-            console.error('Faild to update pet:', error)
-        }
-        }
+        };
     };
 
     // return page UI
