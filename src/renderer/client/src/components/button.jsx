@@ -1,34 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import '../css/button.css';
+import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import '../css/button.css'
 
 const Button = ({ text, icon, onClick, noOutline, className }) => {
-  const [clickedOnce, setClickedOnce] = useState(false);
-  const buttonRef = useRef(null);
+  const [clickedOnce, setClickedOnce] = useState(false)
+  const buttonRef = useRef(null)
 
   const handleClick = () => {
     if (!clickedOnce) {
-      setClickedOnce(true);
+      setClickedOnce(true)
     } else {
       if (onClick) {
-        onClick(); 
+        onClick()
       }
-      console.log('Second click action!');
+      console.log('Second click action!')
     }
-  };
+  }
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (buttonRef.current && !buttonRef.current.contains(event.target)) {
-        setClickedOnce(false);
+        setClickedOnce(false)
       }
-    };
+    }
 
-    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('click', handleOutsideClick)
     return () => {
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, []);
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [])
 
   return (
     <button
@@ -38,23 +38,23 @@ const Button = ({ text, icon, onClick, noOutline, className }) => {
     >
       {icon && <span className="button-icon">{icon}</span>}
       {text && <h4 className="button-text">{text}</h4>}
-      {className === 'folder-page-folder' && <p className='notes-number'>3</p>}
+      {className === 'folder-page-folder' && <p className="notes-number">3</p>}
     </button>
-  );
-};
+  )
+}
 
 Button.propTypes = {
   text: PropTypes.string,
   icon: PropTypes.node,
   onClick: PropTypes.func,
   noOutline: PropTypes.bool,
-  className: PropTypes.string, 
-};
+  className: PropTypes.string
+}
 
-Button.defaultProps = {
-  text: '',
-  noOutline: false,
-  className: '',
-};
+// Button.defaultProps = {
+//   text: '',
+//   noOutline: false,
+//   className: '',
+// };
 
-export default Button;
+export default Button
