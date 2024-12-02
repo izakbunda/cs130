@@ -7,7 +7,7 @@
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
