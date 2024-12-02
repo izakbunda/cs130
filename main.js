@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require("electron");
+const path = require("path");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -9,9 +10,12 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    icon: path.join(__dirname, "resources/icons/sharkie.icns")
   });
 
   mainWindow.loadURL("https://todogotchi.vercel.app");
+
+  
 
   mainWindow.on("closed", function () {
     app.quit();

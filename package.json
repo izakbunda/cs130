@@ -1,12 +1,13 @@
 {
   "name": "todogotchi",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "gamify your to-do list",
   "main": "main.js",
-  "author": "example.com",
+  "author": "Todogotchi Parents",
   "homepage": "https://github.com/izakbunda/todogotchi",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "license": "ISC",
   "dependencies": {},
@@ -15,19 +16,14 @@
     "electron-builder": "^23.6.0"
   },
   "build": {
-    "appId": "TodoApp",
-    "productName": "TodoApp",
+    "appId": "com.Todogotchi.todogotchi",
+    "productName": "todogotchi",
     "directories": {
       "output": "dist"
     },
-    "win": {
-      "target": "nsis"
-    },
     "mac": {
-      "target": "dmg"
-    },
-    "linux": {
-      "target": "AppImage"
+      "target": ["dmg", "zip"],
+      "icon": "resources/icons/sharkie.icns"
     }
   }
 }
