@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import ProgressBar from '../progress-bar'
 
+// Simple render test with more inputs
 describe('ProgressBar Component', () => {
   it('renders correctly with given props', () => {
     render(<ProgressBar currentExp={50} level={1} page="Landing" />)
