@@ -1,0 +1,28 @@
+.bar-container {
+    margin: 0px;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.bar-background {
+    height: 5px;
+    width: 90%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar-progress {
+    height: 100%;
+    background-color: #4caf50;
+    border-radius: 5px 0 0 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+.task-progress-text {
+    text-align: start;
+    font-weight: 'bold';
+    width: 25%;
+    margin: 0px;
+}
