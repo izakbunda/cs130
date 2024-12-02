@@ -17,8 +17,8 @@ import { register } from "./controllers/auth.js";
 
 // import { verifyToken } from "./middleware/auth.js";
 
-const __filename = fileURLToPath(import.meta.url); // so we can grab the file url
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url); // so we can grab the file url
+// const __dirname = path.dirname(__filename);
 dotenv.config(); // this allows us to do process.env
 
 const app = express();
@@ -40,6 +40,7 @@ app.use(morgan("common")); // 'common' outputs method, URL, status, and response
 app.use((req, res, next) => {
   console.log("Request Headers:", req.headers);
   console.log("Request Body:", req.body);
+  res.header("Access-Control-Allow-Origin", "*")
   next();
 });
 
@@ -68,7 +69,9 @@ mongoose
     // useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+    if (process.env.NODE_ENV !== 'test') {
+      app.listen(PORT, () => console.log(`Server Port: ${PORT}`))
+    }
 
     /* ONLY ADD THIS ONE TIME */
     // manually inject this information
@@ -76,3 +79,5 @@ mongoose
     // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+  export default app;
