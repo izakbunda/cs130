@@ -93,7 +93,7 @@ function PetPage() {
         return
       }
 
-      const resp = await fetch(`http://localhost:3001/pets/${userId}`, {
+      const resp = await fetch(`http://todogotchi-release-server.vercel.app/pets/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: petName, type: petType })

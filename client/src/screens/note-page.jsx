@@ -99,7 +99,7 @@ function NotePage() {
         console.log('updating the stupid progress bar because of taskupdate: ', taskUpdate, currentTask)
         const fetchPet = async (petId) => {
             try {
-                const response = await fetch(`http://localhost:3001/pets/${petId}`);
+                const response = await fetch(`http://todogotchi-release-server.vercel.app/pets/${petId}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
@@ -131,7 +131,7 @@ function NotePage() {
     const fetchNotes = async () => {
         try {
             const folderId = folder._id;
-            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/notes/${folderId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -157,7 +157,7 @@ function NotePage() {
 
         try {
             const folderId = folder._id;
-            const resp = await fetch(`http://localhost:3001/notes/${folderId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/notes/${folderId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: noteInput })
@@ -181,7 +181,7 @@ function NotePage() {
     // DELETE specific note from server
     const deleteNote = async (noteId) => {
         try {
-            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/notes/${noteId}`, {
                 method: 'DELETE'
             });
 
@@ -200,7 +200,7 @@ function NotePage() {
     // UPDATE specific note on server
     const updateNote = async (noteId, noteName) => {
         try {
-            const resp = await fetch(`http://localhost:3001/notes/${noteId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/notes/${noteId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: noteName })
@@ -218,7 +218,7 @@ function NotePage() {
     // DELETE specific task from server
     const deleteTask = async (taskId) => {
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/tasks/${taskId}`, {
                 method: 'DELETE'
             });
 
@@ -293,7 +293,7 @@ function NotePage() {
         const updateTask = async () => {
             let changeInPoints = 0;
             try {
-                const resp = await fetch(`http://localhost:3001/tasks/${id}`, {
+                const resp = await fetch(`http://todogotchi-release-server.vercel.app/tasks/${id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status: checked ? 'completed' : 'pending' }) // Use `checked`
@@ -320,7 +320,7 @@ function NotePage() {
                 const pet_id = localStorage.getItem('pet_id');
 
                 // UPDATE POINTS ON BACKEND
-                const updateResp = await fetch(`http://localhost:3001/pets/${pet_id}`, {
+                const updateResp = await fetch(`http://todogotchi-release-server.vercel.app/pets/${pet_id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ points: pointsToAdd })
@@ -333,7 +333,7 @@ function NotePage() {
                 // NOW WE WANT TO UPDATE THE PET IN ORDER TO RE-RENDER THE PROGRESS BAR
 
                 // GET THE UPDATED PET WITH THE UPDATED CALCULATIONS OF POINTS AND LEVEL
-                const fetchPetResp = await fetch(`http://localhost:3001/pets/${pet_id}`);
+                const fetchPetResp = await fetch(`http://todogotchi-release-server.vercel.app/pets/${pet_id}`);
 
                 if (!fetchPetResp.ok) {
                     throw new Error(

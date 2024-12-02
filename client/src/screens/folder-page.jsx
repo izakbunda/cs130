@@ -84,7 +84,7 @@ function FolderPage() {
     useEffect(() => {
         const fetchPet = async (petId) => {
             try {
-                const response = await fetch(`http://localhost:3001/pets/${petId}`);
+                const response = await fetch(`http://todogotchi-release-server.vercel.app/pets/${petId}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
@@ -116,7 +116,7 @@ function FolderPage() {
     const fetchFolders = async () => {
         try {
             const userId = getUserId();
-            const resp = await fetch(`http://localhost:3001/folders/${userId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/folders/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -142,7 +142,7 @@ function FolderPage() {
 
         try {
             const userId = getUserId();
-            const resp = await fetch(`http://localhost:3001/folders/${userId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/folders/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: folderInput })
@@ -166,7 +166,7 @@ function FolderPage() {
     // DELETE folder from server
     const deleteFolder = async (folderId) => {
         try {
-            const resp = await fetch(`http://localhost:3001/folders/${folderId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/folders/${folderId}`, {
                 method: 'DELETE'
             });
 
@@ -190,7 +190,7 @@ function FolderPage() {
         }
 
         try {
-            const resp = await fetch(`http://localhost:3001/folders/${folderId}`, {
+            const resp = await fetch(`http://todogotchi-release-server.vercel.app/folders/${folderId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: folderName })

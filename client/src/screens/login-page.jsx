@@ -38,7 +38,7 @@ function LoginPage() {
   }
 
   const login = async () => {
-    const loggedInResponse = await fetch('http://localhost:3001/auth/login', {
+    const loggedInResponse = await fetch('http://todogotchi-release-server.vercel.app/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -75,7 +75,7 @@ function LoginPage() {
   }
 
   const register = async () => {
-    const registerResponse = await fetch('http://localhost:3001/auth/register', {
+    const registerResponse = await fetch('http://todogotchi-release-server.vercel.app/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
