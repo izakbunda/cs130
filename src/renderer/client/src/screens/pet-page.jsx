@@ -30,19 +30,19 @@ function PetPage() {
       // Left-back
       transform: 'translate(-120px, -20px) scale(0.9)',
       zIndex: 1,
-      type: 'sharkie'
+      type: 'Sharkie'
     },
     {
       // Center-forward
       transform: 'translate(0, 0) scale(1)',
       zIndex: 4,
-      type: 'froggy'
+      type: 'Froggie'
     },
     {
       // Right-back
       transform: 'translate(120px, -20px) scale(0.9)',
       zIndex: 2,
-      type: 'kitty'
+      type: 'Kittie'
     }
   ]
 

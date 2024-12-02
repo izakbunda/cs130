@@ -70,14 +70,19 @@ function Landing() {
 
   return (
     <div className="total-margin">
-      
       <BackButton navigateTo={'/login'} />
       <BackButton navigateTo={'/'} />
       <h1>Todogotchi</h1>
       <div className="landing-container">
         <InfoGrid />
         <ProgressBar currentExp={pet.points} level={pet.level} page="Landing" />
-        <PetIcon name={pet.name} level={pet.level} exp={pet.exp} page="Landing" />
+        <PetIcon
+          name={pet.name}
+          level={pet.level}
+          exp={pet.exp}
+          variant={pet.type}
+          page="Landing"
+        />
         <div className="button-row">
           <Button
             text="Logout"
