@@ -29,7 +29,7 @@ function Landing() {
   useEffect(() => {
     const fetchPet = async (petId) => {
       try {
-        const response = await fetch(`http://localhost:3001/pets/${petId}`)
+        const response = await fetch(`https://todogotchi-release-server.vercel.app/pets/${petId}`)
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`)
         }

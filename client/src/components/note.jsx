@@ -47,10 +47,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     // fetch tasks from server
     const fetchTasks = async () => {
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${noteId}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
+            const resp = await fetch(`https://todogotchi-release-server.vercel.app/tasks/${noteId}`)
 
             if (!resp.ok) {
                 throw new Error(`Error: ${resp.status} ${resp.statusText}`);
@@ -72,7 +69,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
         }
 
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${noteId}`, {
+            const resp = await fetch(`https://todogotchi-release-server.vercel.app/tasks/${noteId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: taskInput })
@@ -95,7 +92,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     // UPDATE specific task's name on server
     const updateTaskName = async (taskId, taskName) => {
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+            const resp = await fetch(`https://todogotchi-release-server.vercel.app/tasks/${taskId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: taskName})
@@ -113,7 +110,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     // UPDATE specific task's due date on server
     const updateTaskDueDate = async (taskId, dueDate) => {
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+            const resp = await fetch(`https://todogotchi-release-server.vercel.app/tasks/${taskId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ dueDate: dueDate})
@@ -131,7 +128,7 @@ function Note({ id, name, noteId, onDelete, editingNote, editingTask, editingDat
     // UPDATE specific task's category on server
     const updateTaskCategory = async (taskId, category) => {
         try {
-            const resp = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+            const resp = await fetch(`https://todogotchi-release-server.vercel.app/tasks/${taskId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category: category})
