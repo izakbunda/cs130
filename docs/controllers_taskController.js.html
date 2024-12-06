@@ -1,4 +1,32 @@
-import Task from "../models/Task.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/taskController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/taskController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Task from "../models/Task.js";
 import Note from "../models/Note.js";
 
 // points mapping -- refactor/change later
@@ -19,7 +47,7 @@ let pointsMapping = {
  * @param {Object} req.body - The body of the request containing task data.
  * @param {string} req.body.name - The name of the task.
  * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with the newly created task.
+ * @returns {Promise&lt;void>} Sends a JSON response with the newly created task.
  * @throws {Object} Sends a JSON response with appropriate error messages.
  */
 export const createTask = async (req, res) => {
@@ -75,7 +103,7 @@ export const createTask = async (req, res) => {
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.noteId - The ID of the note to retrieve tasks from.
  * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with the list of tasks.
+ * @returns {Promise&lt;void>} Sends a JSON response with the list of tasks.
  * @throws {Object} Sends a JSON response with appropriate error messages.
  */
 export const getTasks = async (req, res) => {
@@ -115,7 +143,7 @@ export const getTasks = async (req, res) => {
  * @param {string} [req.body.status] - The updated status of the task (optional).
  * @param {string} [req.body.category] - The updated category of the task (optional).
  * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with the updated task's details.
+ * @returns {Promise&lt;void>} Sends a JSON response with the updated task's details.
  * @throws {Object} Sends a JSON response with appropriate error messages.
  */
 export const updateTask = async (req, res) => {
@@ -137,7 +165,7 @@ export const updateTask = async (req, res) => {
     }
 
     // if category changes, update points
-    if (taskData.category && taskData.category !== oldTask.category) {
+    if (taskData.category &amp;&amp; taskData.category !== oldTask.category) {
       taskData.points = pointsMapping[taskData.category];
     }
 
@@ -163,7 +191,7 @@ export const updateTask = async (req, res) => {
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.taskId - The ID of the task to delete.
  * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response indicating success.
+ * @returns {Promise&lt;void>} Sends a JSON response indicating success.
  * @throws {Object} Sends a JSON response with appropriate error messages.
  */
 export const deleteTask = async (req, res) => {
@@ -189,3 +217,26 @@ export const deleteTask = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#FolderSchema">FolderSchema</a></li><li><a href="global.html#NoteSchema">NoteSchema</a></li><li><a href="global.html#PetSchema">PetSchema</a></li><li><a href="global.html#TaskSchema">TaskSchema</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#createFolder">createFolder</a></li><li><a href="global.html#createNote">createNote</a></li><li><a href="global.html#createPet">createPet</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#deleteFolder">deleteFolder</a></li><li><a href="global.html#deleteNote">deleteNote</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#getFolders">getFolders</a></li><li><a href="global.html#getNotes">getNotes</a></li><li><a href="global.html#getPet">getPet</a></li><li><a href="global.html#getTasks">getTasks</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#updateFolder">updateFolder</a></li><li><a href="global.html#updateNote">updateNote</a></li><li><a href="global.html#updatePet">updatePet</a></li><li><a href="global.html#updateTask">updateTask</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Dec 05 2024 16:16:19 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

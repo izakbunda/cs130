@@ -1,0 +1,12 @@
+{
+  "source": {
+    "include": ["server", "client/src"],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules|__tests__)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true,
+    "readme": "./README.md"
+  }
+}
