@@ -10,10 +10,10 @@
     "build": "electron-builder"
   },
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
     "electron": "^24.3.1",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^23.6.0",
+    "jsdoc": "^4.0.4"
   },
   "build": {
     "appId": "com.Todogotchi.todogotchi",
@@ -22,7 +22,10 @@
       "output": "dist"
     },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "icon": "resources/icons/sharkie.icns"
     }
   }
